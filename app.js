@@ -27,7 +27,7 @@ function initScene() {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.8;
+  renderer.toneMappingExposure = 1.5;
   document.body.insertBefore(renderer.domElement, document.body.firstChild);
 
   // Mouse parallax for subtle camera movement
@@ -36,33 +36,42 @@ function initScene() {
     mouseY = (e.clientY / innerHeight - 0.5) * 2;
   });
 
-  // Ambient light (very dim)
-  const ambient = new THREE.AmbientLight(0x1a1520, 0.3);
+  // Ambient light (明亮)
+  const ambient = new THREE.AmbientLight(0x2a2030, 0.8);
   scene.add(ambient);
 
-  // Candle light
-  candleLight = new THREE.PointLight(0xe8a33c, 2, 10, 2);
-  candleLight.position.set(0, 2.2, 0);
+  // Hemisphere light (天光+地光)
+  const hemi = new THREE.HemisphereLight(0x304060, 0x1a1008, 0.5);
+  scene.add(hemi);
+
+  // Candle light (主光源)
+  candleLight = new THREE.PointLight(0xe8a33c, 3.5, 12, 1.5);
+  candleLight.position.set(0.5, 2, 0.2);
   candleLight.castShadow = true;
   candleLight.shadow.mapSize.set(512, 512);
   candleLight.shadow.radius = 4;
   scene.add(candleLight);
 
-  // Secondary warm light
-  const warmLight = new THREE.PointLight(0xb8962e, 0.5, 8);
-  warmLight.position.set(0, 3, 1);
-  scene.add(warmLight);
+  // 桌面补光
+  const tableLight = new THREE.PointLight(0xd4af37, 1.2, 6);
+  tableLight.position.set(0, 1.8, 0.5);
+  scene.add(tableLight);
 
-  // Dim blue fill light (moonlight through window)
-  const moonLight = new THREE.DirectionalLight(0x304060, 0.15);
-  moonLight.position.set(-3, 4, -2);
-  scene.add(moonLight);
+  // 背景暖光
+  const backLight = new THREE.PointLight(0xb8962e, 0.8, 10);
+  backLight.position.set(-1, 3, -2);
+  scene.add(backLight);
+
+  // 侧面补光
+  const sideLight = new THREE.PointLight(0x6080a0, 0.4, 8);
+  sideLight.position.set(3, 2, 1);
+  scene.add(sideLight);
 
   // Floor
   const floorGeo = new THREE.PlaneGeometry(20, 20);
   const floorMat = new THREE.MeshStandardMaterial({
-    color: 0x0a0810,
-    roughness: 0.9,
+    color: 0x14101e,
+    roughness: 0.85,
     metalness: 0.1
   });
   const floor = new THREE.Mesh(floorGeo, floorMat);
@@ -101,8 +110,8 @@ function createTable() {
   // Table top
   const topGeo = new THREE.BoxGeometry(2.4, 0.08, 1.6);
   const topMat = new THREE.MeshStandardMaterial({
-    color: 0x2a1f14,
-    roughness: 0.85,
+    color: 0x3a2a18,
+    roughness: 0.75,
     metalness: 0.05
   });
   tableMesh = new THREE.Mesh(topGeo, topMat);
@@ -166,6 +175,11 @@ function createCandle() {
   candleFlame.scale.set(0.12, 0.2, 1);
   scene.add(candleFlame);
 
+  // 额外蜡烛光晕
+  const glowLight = new THREE.PointLight(0xffa500, 1.5, 4);
+  glowLight.position.set(0.5, 1.5, 0.2);
+  scene.add(glowLight);
+
   // Candle light position
   candleLight.position.set(0.5, 1.5, 0.2);
 }
@@ -179,7 +193,7 @@ function createParchment() {
   const pctx = parchCanvas.getContext('2d');
 
   // Parchment texture
-  pctx.fillStyle = '#1a150e';
+  pctx.fillStyle = '#2a2018';
   pctx.fillRect(0, 0, 512, 340);
 
   // Aged edges
@@ -273,7 +287,7 @@ function createStarField() {
 function createWalls() {
   // Back wall
   const wallGeo = new THREE.PlaneGeometry(20, 8);
-  const wallMat = new THREE.MeshStandardMaterial({ color: 0x080610, roughness: 0.95, metalness: 0 });
+  const wallMat = new THREE.MeshStandardMaterial({ color: 0x12101a, roughness: 0.9, metalness: 0 });
   const backWall = new THREE.Mesh(wallGeo, wallMat);
   backWall.position.set(0, 4, -6);
   scene.add(backWall);
@@ -291,7 +305,7 @@ function createWalls() {
 
   // Ceiling
   const ceilGeo = new THREE.PlaneGeometry(20, 20);
-  const ceilMat = new THREE.MeshStandardMaterial({ color: 0x050308, roughness: 1 });
+  const ceilMat = new THREE.MeshStandardMaterial({ color: 0x0a0812, roughness: 1 });
   const ceil = new THREE.Mesh(ceilGeo, ceilMat);
   ceil.rotation.x = Math.PI / 2;
   ceil.position.y = 8;
@@ -304,7 +318,7 @@ function animate() {
   // Candle flicker
   if (candleLight) {
     const t = Date.now() * 0.003;
-    candleLight.intensity = 1.8 + Math.sin(t * 3) * 0.2 + Math.sin(t * 7) * 0.1;
+    candleLight.intensity = 3.2 + Math.sin(t * 3) * 0.3 + Math.sin(t * 7) * 0.15;
     if (candleFlame) {
       candleFlame.scale.y = 0.2 + Math.sin(t * 5) * 0.02;
       candleFlame.position.x = 0.5 + Math.sin(t * 4) * 0.003;
