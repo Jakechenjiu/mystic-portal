@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>从心而书 · 神秘学殿堂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ==================== 粒子画布 ==================== -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- ==================== 音频控制 ==================== -->
+<button id="audio-toggle" class="audio-btn" aria-label="切换音效">
+  <span class="audio-icon">🔇</span>
+</button>
+
+<!-- ==================== 启动画面 ==================== -->
+<div id="splash" class="splash">
+  <div class="splash-content">
+    <div class="rune-container">
+      <svg class="rune-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- 生命之花几何图形 -->
+        <defs>
+          <filter id="rune-glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+          <linearGradient id="rune-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#b8962e;stop-opacity:0"/>
+            <stop offset="50%" style="stop-color:#e8a33c;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#b8962e;stop-opacity:0"/>
+          </linearGradient>
+        </defs>
+        <!-- 外圈 -->
+        <circle cx="100" cy="100" r="80" fill="none" stroke="url(#rune-gradient)" stroke-width="0.5" class="rune-circle rune-circle-1"/>
+        <circle cx="100" cy="100" r="60" fill="none" stroke="url(#rune-gradient)" stroke-width="0.5" class="rune-circle rune-circle-2"/>
+        <circle cx="100" cy="100" r="40" fill="none" stroke="url(#rune-gradient)" stroke-width="0.5" class="rune-circle rune-circle-3"/>
+        <!-- 六芒星 -->
+        <polygon points="100,20 140,80 180,140 100,180 20,140 60,80" fill="none" stroke="url(#rune-gradient)" stroke-width="0.8" class="rune-hex" filter="url(#rune-glow)"/>
+        <!-- 中心符号 -->
+        <text x="100" y="108" text-anchor="middle" class="rune-symbol" fill="#e8a33c" font-size="28" opacity="0">☿</text>
+      </svg>
+    </div>
+    <div class="splash-text">
+      <p class="splash-line splash-line-1">你找到了这扇门。</p>
+      <p class="splash-line splash-line-2">这不是巧合。</p>
+      <p class="splash-line splash-line-3">在你出生的那一刻，</p>
+      <p class="splash-line splash-line-4">星辰就已经写好了这个时刻。</p>
+    </div>
+    <button id="enter-btn" class="btn-ritual splash-enter">
+      <span class="btn-text">我准备好了</span>
+      <span class="btn-glow"></span>
+    </button>
+  </div>
+  <!-- 门扉 -->
+  <div class="door-container">
+    <div class="door door-left">
+      <div class="door-panel">
+        <div class="door-symbol">☽</div>
+        <div class="door-ornament"></div>
+      </div>
+    </div>
+    <div class="door door-right">
+      <div class="door-panel">
+        <div class="door-symbol">☾</div>
+        <div class="door-ornament"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 主应用 ==================== -->
+<div id="app" class="app hidden">
+
+  <!-- 导航栏 -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="nav-symbol">☿</span>
+      <span class="nav-title">从心而书</span>
+    </div>
+    <div class="nav-links">
+      <a href="#home" class="nav-link active" data-page="home">密室</a>
+      <a href="#tarot" class="nav-link" data-page="tarot">塔罗</a>
+      <a href="#daily" class="nav-link" data-page="daily">启示</a>
+      <a href="#records" class="nav-link" data-page="records">壁龛</a>
+    </div>
+    <button class="nav-settings" id="settings-btn" aria-label="设置">
+      <span>⚙</span>
+    </button>
+  </nav>
+
+  <!-- ==================== 首页：密室之门 ==================== -->
+  <section id="page-home" class="page page-home active">
+    <div class="page-inner">
+      <div class="chamber-welcome">
+        <p class="welcome-text">欢迎回来，旅人。</p>
+        <p class="welcome-sub">今天的星辰与你上次离开时不同了。你也是。</p>
+      </div>
+
+      <div class="chamber-table">
+        <div class="table-surface">
+          <!-- 器物入口 -->
+          <div class="artifacts-grid">
+            <a href="#tarot" class="artifact" data-page="tarot">
+              <div class="artifact-icon">
+                <div class="card-stack">
+                  <div class="card card-1"></div>
+                  <div class="card card-2"></div>
+                  <div class="card card-3"></div>
+                </div>
+              </div>
+              <span class="artifact-name">塔罗占卜</span>
+              <span class="artifact-desc">桌上的牌</span>
+            </a>
+
+            <a href="#" class="artifact artifact-coming">
+              <div class="artifact-icon">
+                <div class="astrolabe">
+                  <div class="astrolabe-ring"></div>
+                  <div class="astrolabe-ring astrolabe-ring-2"></div>
+                  <div class="astrolabe-center">✦</div>
+                </div>
+              </div>
+              <span class="artifact-name">星盘分析</span>
+              <span class="artifact-desc">天球仪</span>
+              <span class="artifact-soon">即将开启</span>
+            </a>
+
+            <a href="#" class="artifact artifact-coming">
+              <div class="artifact-icon">
+                <div class="parchment">
+                  <div class="parchment-line"></div>
+                  <div class="parchment-line"></div>
+                  <div class="parchment-line"></div>
+                </div>
+              </div>
+              <span class="artifact-name">姓名测算</span>
+              <span class="artifact-desc">羊皮纸</span>
+              <span class="artifact-soon">即将开启</span>
+            </a>
+
+            <a href="#daily" class="artifact" data-page="daily">
+              <div class="artifact-icon">
+                <div class="candle-icon">
+                  <div class="candle-flame"></div>
+                  <div class="candle-body"></div>
+                </div>
+              </div>
+              <span class="artifact-name">每日启示</span>
+              <span class="artifact-desc">桌角的蜡烛</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 法律声明 -->
+      <footer class="legal-footer">
+        <p>本小程序提供文化与娱乐性质的象征解读服务，不构成任何形式的预测、建议或决策依据。人生的选择权始终在你手中。</p>
+      </footer>
+    </div>
+  </section>
+
+  <!-- ==================== 塔罗占卜 ==================== -->
+  <section id="page-tarot" class="page page-tarot">
+    <div class="page-inner">
+      <!-- 开始前 -->
+      <div id="tarot-intro" class="tarot-stage">
+        <div class="tarot-intro-text">
+          <p class="ritual-text">在翻开牌面之前，请在心中默念你的问题。</p>
+          <p class="ritual-sub">不必说出声——牌听得见。</p>
+        </div>
+        <button id="tarot-begin" class="btn-ritual">
+          <span class="btn-text">开始占卜</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+
+      <!-- 准备阶段：蜡烛倒计时 -->
+      <div id="tarot-preparing" class="tarot-stage hidden">
+        <div class="preparing-text">
+          <p>深呼吸。想你的问题。</p>
+        </div>
+        <div class="candle-countdown">
+          <div class="countdown-candle" id="candle-1">
+            <div class="countdown-flame"></div>
+            <div class="countdown-body"></div>
+          </div>
+          <div class="countdown-candle" id="candle-2">
+            <div class="countdown-flame"></div>
+            <div class="countdown-body"></div>
+          </div>
+          <div class="countdown-candle" id="candle-3">
+            <div class="countdown-flame"></div>
+            <div class="countdown-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 选牌阶段 -->
+      <div id="tarot-choosing" class="tarot-stage hidden">
+        <p class="choose-hint">选择一张牌</p>
+        <div class="tarot-spread">
+          <div class="tarot-card" data-index="0"><div class="card-back">✦</div><div class="card-front"></div></div>
+          <div class="tarot-card" data-index="1"><div class="card-back">✦</div><div class="card-front"></div></div>
+          <div class="tarot-card" data-index="2"><div class="card-back">✦</div><div class="card-front"></div></div>
+          <div class="tarot-card" data-index="3"><div class="card-back">✦</div><div class="card-front"></div></div>
+          <div class="tarot-card" data-index="4"><div class="card-back">✦</div><div class="card-front"></div></div>
+        </div>
+      </div>
+
+      <!-- 结果揭晓 -->
+      <div id="tarot-result" class="tarot-stage hidden">
+        <div class="result-card-display">
+          <div class="result-card-frame">
+            <div class="result-card-name" id="result-card-name"></div>
+            <div class="result-card-symbol" id="result-card-symbol"></div>
+          </div>
+        </div>
+        <div class="result-text-container">
+          <p class="result-text" id="result-text"></p>
+          <p class="result-reflection" id="result-reflection"></p>
+        </div>
+        <div class="result-legal">
+          <p>以上内容基于传统象征体系的文化解读，仅供娱乐与自我反思参考。</p>
+        </div>
+        <button id="tarot-again" class="btn-ritual btn-secondary">
+          <span class="btn-text">再次占卜</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 每日启示 ==================== -->
+  <section id="page-daily" class="page page-daily">
+    <div class="page-inner">
+      <div class="daily-candle-scene">
+        <div class="daily-candle">
+          <div class="daily-flame"></div>
+          <div class="daily-body">
+            <div class="daily-wax-drip"></div>
+          </div>
+          <div class="daily-holder"></div>
+        </div>
+        <p class="daily-intro">今天的蜡烛已经点燃。<br>火焰在风中摇曳，但没有熄灭——<br>就像你今天需要的那种坚持。</p>
+        <button id="daily-reveal" class="btn-ritual">
+          <span class="btn-text">窥见今日启示</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+      <div id="daily-result" class="daily-result hidden">
+        <div class="daily-message" id="daily-message"></div>
+        <div class="result-legal">
+          <p>以上内容基于传统象征体系的文化解读，仅供娱乐与自我反思参考。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 我的记录 ==================== -->
+  <section id="page-records" class="page page-records">
+    <div class="page-inner">
+      <div class="records-alcove">
+        <div class="alcove-header">
+          <h2 class="alcove-title">壁龛</h2>
+          <p class="alcove-subtitle">你的每次探索，都被珍藏于此</p>
+        </div>
+        <div id="records-list" class="records-list">
+          <!-- 动态填充 -->
+        </div>
+        <div id="records-empty" class="records-empty">
+          <p>壁龛空空如也。</p>
+          <p>也许你还没有准备好留下痕迹。</p>
+          <p>也许你来得太早。</p>
+          <p>也许……你来得正是时候。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 设置面板 ==================== -->
+  <div id="settings-panel" class="settings-panel hidden">
+    <div class="settings-overlay"></div>
+    <div class="settings-drawer">
+      <div class="settings-header">
+        <h3>烛台底部的暗格</h3>
+        <button class="settings-close" id="settings-close">✕</button>
+      </div>
+      <div class="settings-body">
+        <div class="setting-item">
+          <label>音效</label>
+          <div class="setting-toggle">
+            <input type="checkbox" id="sound-toggle" checked>
+            <label for="sound-toggle" class="toggle-label"></label>
+          </div>
+        </div>
+        <div class="setting-item">
+          <label>粒子效果</label>
+          <div class="setting-toggle">
+            <input type="checkbox" id="particles-toggle" checked>
+            <label for="particles-toggle" class="toggle-label"></label>
+          </div>
+        </div>
+        <div class="settings-legal">
+          <p>数据隐私：你的生辰、姓名等信息仅用于本小程序内的解读，不共享给第三方。</p>
+          <button class="btn-text-only" id="clear-data">清除所有个人数据</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== 烟雾过渡层 ==================== -->
+<div id="smoke-transition" class="smoke-transition">
+  <div class="smoke-layer smoke-1"></div>
+  <div class="smoke-layer smoke-2"></div>
+  <div class="smoke-layer smoke-3"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
