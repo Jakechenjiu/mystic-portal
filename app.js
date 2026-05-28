@@ -3,13 +3,15 @@
 // ========================================
 
 // ── Three.js Scene ──
-let scene, camera, renderer, controls;
+let scene, camera, renderer;
 let candleLight, candleFlame;
 let parchmentMesh, tableMesh;
 let starField;
 let cameraTarget = { x: 0, y: 2.5, z: 5 };
 let cameraLookAt = { x: 0, y: 1.2, z: 0 };
 let isAnimating = false;
+let mouseX = 0, mouseY = 0;
+let camEnabled = false;
 
 function initScene() {
   scene = new THREE.Scene();
@@ -28,16 +30,11 @@ function initScene() {
   renderer.toneMappingExposure = 0.8;
   document.body.insertBefore(renderer.domElement, document.body.firstChild);
 
-  // OrbitControls (limited)
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-  controls.maxPolarAngle = Math.PI / 2.2;
-  controls.minPolarAngle = Math.PI / 6;
-  controls.maxDistance = 8;
-  controls.minDistance = 2;
-  controls.target.set(0, 1.2, 0);
-  controls.enabled = false; // disabled until after splash
+  // Mouse parallax for subtle camera movement
+  document.addEventListener('mousemove', e => {
+    mouseX = (e.clientX / innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / innerHeight - 0.5) * 2;
+  });
 
   // Ambient light (very dim)
   const ambient = new THREE.AmbientLight(0x1a1520, 0.3);
@@ -90,6 +87,14 @@ function initScene() {
 
   // Start render loop
   animate();
+
+  // Hide loading
+  const loadEl = document.getElementById('loading');
+  if (loadEl) {
+    loadEl.style.opacity = '0';
+    loadEl.style.transition = 'opacity 1s';
+    setTimeout(() => loadEl.remove(), 1000);
+  }
 }
 
 function createTable() {
@@ -309,7 +314,12 @@ function animate() {
   // Star rotation
   if (starField) starField.rotation.y += 0.00005;
 
-  controls.update();
+  // Subtle camera parallax (only when not animating)
+  if (!isAnimating && camEnabled) {
+    camera.position.x += (cameraTarget.x + mouseX * 0.15 - camera.position.x) * 0.02;
+    camera.position.y += (cameraTarget.y - mouseY * 0.08 - camera.position.y) * 0.02;
+  }
+
   renderer.render(scene, camera);
 }
 
@@ -747,20 +757,20 @@ function bindSettings() {
 // ── Init ──
 document.addEventListener('DOMContentLoaded', () => {
   // Init Three.js
-  initScene();
-
-  // Hide loading after scene is ready
-  setTimeout(() => {
-    $('loading').style.opacity = '0';
-    $('loading').style.transition = 'opacity 1s';
-    setTimeout(() => $('loading').remove(), 1000);
-  }, 1500);
+  try {
+    initScene();
+  } catch (e) {
+    console.error('Three.js init error:', e);
+    const loadEl = document.getElementById('loading');
+    if (loadEl) loadEl.querySelector('#load-status').textContent = '3D 场景加载失败，但功能仍可用';
+    setTimeout(() => { if (loadEl) loadEl.remove(); }, 2000);
+  }
 
   // Age gate
   if (localStorage.getItem('ma')) {
     $('age').remove(); $('splash').remove(); $('doors').remove();
     $('nav').style.display = '';
-    controls.enabled = true;
+    camEnabled = true;
     renderMenu();
   } else {
     $('ayes').onclick = () => {
@@ -800,7 +810,7 @@ function animateSplash() {
     setTimeout(() => {
       $('splash').classList.add('gone');
       $('nav').style.display = '';
-      controls.enabled = true;
+      camEnabled = true;
       renderMenu();
       AU.success();
     }, 900);

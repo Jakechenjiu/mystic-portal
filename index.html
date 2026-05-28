@@ -223,7 +223,7 @@ canvas{display:block;width:100%;height:100%}
 </head>
 <body>
 
-<div class="loading" id="loading">✦ 帷幕正在升起 ✦</div>
+<div class="loading" id="loading">✦ 帷幕正在升起 ✦<br><small style="font-size:.5rem;color:var(--tgh);margin-top:8px;display:block" id="load-status">加载中...</small></div>
 
 <div class="age" id="age"><div class="age-box"><h2>你已年满18岁吗？</h2><p>你还年轻，星辰为你保留了最多的可能性。<br>这些解读可以参考，但不要让它替你做决定。</p><div class="age-btns"><button class="btn" id="ayes">我已成年</button><button class="btn btn2" id="ano">我还未成年</button></div></div></div>
 
@@ -254,8 +254,7 @@ canvas{display:block;width:100%;height:100%}
 
 <div class="set hidden" id="set"><div class="set-o" id="seto"></div><div class="set-d"><div class="set-h"><h3>烛台底部的暗格</h3><button class="set-x" id="setx">✕</button></div><div class="set-i"><label>粒子效果</label><input type="checkbox" id="ptog" checked></div><div class="set-l"><p>数据隐私：你的信息仅用于本小程序内的解读，不共享给第三方。</p><button class="set-b" id="clr">清除所有个人数据</button></div></div></div>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
