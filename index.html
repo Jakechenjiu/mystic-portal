@@ -6,11 +6,23 @@
 <meta name="theme-color" content="#0d0a1a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>从心而书 · 神秘学殿堂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--abyss:#0d0a1a;--abyss-l:#151028;--abyss-d:#08061a;--gold:#b8962e;--gold-d:#8a6f20;--gold-b:#d4af37;--ember:#e8a33c;--ink:#1a2744;--bone:#e8e0d0;--tg:#c8a84e;--td:#807868;--tgh:#504840;--blood:#6b1c1c;--ease:cubic-bezier(.16,1,.3,1)}
+:root{--abyss:#0d0a1a;--abyss-l:#151028;--abyss-d:#08061a;--gold:#b8962e;--gold-d:#8a6f20;--gold-b:#d4af37;--ember:#e8a33c;--ink:#1a2744;--bone:#e8e0d0;--tg:#c8a84e;--td:#807868;--tgh:#504840;--blood:#6b1c1c;--ease:cubic-bezier(.16,1,.3,1);--font-title:'Cinzel','Noto Serif SC',Georgia,serif;--font-body:'EB Garamond','Noto Serif SC',Georgia,serif}
 html{font-size:16px;-webkit-font-smoothing:antialiased}
-body{font-family:Georgia,'Noto Serif SC','SimSun',serif;background:var(--abyss);color:var(--bone);min-height:100vh;overflow-x:hidden;line-height:1.7}
+body{font-family:var(--font-body);background:var(--abyss);color:var(--bone);min-height:100vh;overflow-x:hidden;line-height:1.7;position:relative}
+/* 羊皮纸纹理 + 神圣几何暗纹 + 暗角 */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+background:
+  url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E"),
+  radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(8,6,26,.6) 100%);
+}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+background:url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='150' cy='150' r='60' fill='none' stroke='%23b8962e' stroke-width='.15' opacity='.04'/%3E%3Ccircle cx='150' cy='150' r='90' fill='none' stroke='%23b8962e' stroke-width='.1' opacity='.03'/%3E%3Ccircle cx='150' cy='150' r='120' fill='none' stroke='%23b8962e' stroke-width='.08' opacity='.02'/%3E%3Ccircle cx='210' cy='150' r='60' fill='none' stroke='%23b8962e' stroke-width='.1' opacity='.03'/%3E%3Ccircle cx='90' cy='150' r='60' fill='none' stroke='%23b8962e' stroke-width='.1' opacity='.03'/%3E%3Ccircle cx='150' cy='90' r='60' fill='none' stroke='%23b8962e' stroke-width='.1' opacity='.03'/%3E%3Ccircle cx='150' cy='210' r='60' fill='none' stroke='%23b8962e' stroke-width='.1' opacity='.03'/%3E%3C/svg%3E");
+}
 ::selection{background:rgba(184,150,46,.3)}
 button{font-family:inherit;cursor:pointer}
 a{color:inherit;text-decoration:none}
@@ -21,11 +33,12 @@ textarea{resize:vertical;min-height:80px}
 
 #fx{position:fixed;inset:0;z-index:1;pointer-events:none}
 
-/* Age */
+/* Age — 神圣门控 */
 .age{position:fixed;inset:0;z-index:900;display:grid;place-items:center;background:rgba(8,6,26,.97);transition:opacity .6s}
 .age.out{opacity:0;pointer-events:none}
-.age-box{text-align:center;max-width:340px;padding:40px 24px}
-.age-box h2{font-size:1.1rem;color:var(--tg);font-weight:400;letter-spacing:.06em;margin-bottom:14px}
+.age-box{text-align:center;max-width:340px;padding:40px 24px;position:relative}
+.age-box::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.4}
+.age-box h2{font-family:var(--font-title);font-size:1.1rem;color:var(--tg);font-weight:500;letter-spacing:.08em;margin-bottom:14px;text-shadow:0 0 15px rgba(184,150,46,.1)}
 .age-box p{font-size:.78rem;color:var(--td);line-height:1.9;margin-bottom:28px}
 .age-btns{display:flex;gap:12px;justify-content:center}
 
@@ -52,25 +65,29 @@ textarea{resize:vertical;min-height:80px}
 .door-l.open{transform:translateX(-100%)}.door-r.open{transform:translateX(100%)}
 .door-s{font-size:2.5rem;color:var(--gold-d);opacity:.25}
 
-/* Buttons */
-.btn{padding:12px 30px;background:transparent;border:1px solid var(--gold);color:var(--tg);font-size:.88rem;letter-spacing:.12em;transition:all .35s var(--ease);position:relative;overflow:hidden}
-.btn:hover{border-color:var(--gold-b);color:var(--bone);box-shadow:0 0 30px rgba(184,150,46,.12)}
-.btn:active{transform:scale(.97)}
-.btn2{border-color:var(--gold-d);color:var(--td);font-size:.8rem}
-.btn-sm{padding:8px 20px;font-size:.78rem}
+/* Buttons — 烛光脉动 */
+.btn{padding:13px 32px;background:transparent;border:1px solid var(--gold);color:var(--tg);font-family:var(--font-title);font-size:.85rem;letter-spacing:.14em;transition:all .4s var(--ease);position:relative;overflow:hidden}
+.btn::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(184,150,46,.08),transparent 70%);opacity:0;transition:opacity .4s}
+.btn:hover{border-color:var(--gold-b);color:var(--bone);box-shadow:0 0 40px rgba(184,150,46,.15),0 0 80px rgba(184,150,46,.05)}
+.btn:hover::before{opacity:1}
+.btn:active{transform:scale(.97);box-shadow:0 0 60px rgba(184,150,46,.25)}
+.btn2{border-color:var(--gold-d);color:var(--td);font-size:.78rem}
+.btn-sm{padding:8px 20px;font-size:.75rem}
 .btn-glow{position:absolute;inset:-2px;border:1px solid var(--gold);opacity:0;pointer-events:none;transition:all .4s}
-.btn:active .btn-glow{opacity:.5;transform:scale(1.15)}
+.btn:active .btn-glow{opacity:.6;transform:scale(1.2)}
 
-/* Nav */
-.nav{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:linear-gradient(to top,var(--abyss-d) 60%,rgba(8,6,26,.9));border-top:1px solid rgba(184,150,46,.06)}
-.nav-b{display:flex;align-items:center;gap:6px}
-.nav-s{font-size:.9rem;color:var(--gold)}
-.nav-t{font-size:.68rem;color:var(--tg);letter-spacing:.1em}
+/* Nav — 神圣底部导航 */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:linear-gradient(to top,var(--abyss-d) 50%,rgba(8,6,26,.92));border-top:1px solid rgba(184,150,46,.08);backdrop-filter:blur(8px)}
+.nav::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--gold-d),transparent);opacity:.3}
+.nav-b{display:flex;align-items:center;gap:7px}
+.nav-s{font-size:.9rem;color:var(--gold);text-shadow:0 0 10px rgba(184,150,46,.3)}
+.nav-t{font-family:var(--font-title);font-size:.66rem;color:var(--tg);letter-spacing:.12em}
 .nav-l{display:flex;gap:14px;overflow-x:auto}
-.nl{font-size:.58rem;color:var(--td);letter-spacing:.1em;text-transform:uppercase;transition:color .3s;position:relative;padding-bottom:4px;white-space:nowrap}
-.nl:hover,.nl.on{color:var(--tg)}
-.nl.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--gold)}
-.nav-cog{background:none;border:none;color:var(--td);font-size:.85rem}
+.nl{font-family:var(--font-title);font-size:.55rem;color:var(--td);letter-spacing:.12em;text-transform:uppercase;transition:all .3s;position:relative;padding-bottom:5px;white-space:nowrap}
+.nl:hover,.nl.on{color:var(--tg);text-shadow:0 0 8px rgba(184,150,46,.2)}
+.nl.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.nav-cog{background:none;border:none;color:var(--td);font-size:.85rem;transition:all .3s}
+.nav-cog:hover{color:var(--gold);text-shadow:0 0 10px rgba(184,150,46,.3)}
 
 /* Pages */
 .page{display:none;min-height:calc(100vh - 52px)}
@@ -79,20 +96,29 @@ textarea{resize:vertical;min-height:80px}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .pg{max-width:560px;margin:0 auto;padding:40px 16px 70px}
 
-/* Home */
-.hero{text-align:center;margin-bottom:40px;padding-top:20px}
-.hero h1{font-size:clamp(1.2rem,4vw,1.6rem);color:var(--tg);font-weight:400;letter-spacing:.08em;margin-bottom:5px}
+/* Home — 神圣密室 */
+.hero{text-align:center;margin-bottom:40px;padding-top:24px}
+.hero h1{font-family:var(--font-title);font-size:clamp(1.2rem,4.5vw,1.7rem);color:var(--tg);font-weight:500;letter-spacing:.1em;margin-bottom:6px;text-shadow:0 0 20px rgba(184,150,46,.15)}
 .hero p{font-size:.82rem;color:var(--td);font-style:italic}
-.moon-info{text-align:center;margin-bottom:24px;font-size:.7rem;color:var(--tgh);letter-spacing:.08em}
-.table{padding:20px;border:1px solid rgba(184,150,46,.08);border-radius:12px;background:radial-gradient(ellipse at 50% 0%,rgba(184,150,46,.04),transparent 55%),var(--abyss-l)}
+/* 神圣分隔线 */
+.hero::after{content:'✦';display:block;margin-top:16px;color:var(--gold-d);font-size:.6rem;letter-spacing:1em;opacity:.4}
+.moon-info{text-align:center;margin-bottom:24px;font-size:.68rem;color:var(--tgh);letter-spacing:.1em;padding:6px 16px;border:1px solid rgba(184,150,46,.06);border-radius:20px;display:inline-block;margin-left:auto;margin-right:auto;width:auto}
+.moon-info-wrap{text-align:center;margin-bottom:20px}
+.table{padding:22px;border:1px solid rgba(184,150,46,.1);border-radius:14px;background:radial-gradient(ellipse at 50% 0%,rgba(184,150,46,.05),transparent 50%),var(--abyss-l);position:relative;box-shadow:0 4px 30px rgba(0,0,0,.3),inset 0 1px 0 rgba(184,150,46,.06)}
+/* 角落装饰 */
+.table::before,.table::after{content:'';position:absolute;width:20px;height:20px;border-color:rgba(184,150,46,.15);border-style:solid}
+.table::before{top:-1px;left:-1px;border-width:1px 0 0 1px;border-radius:14px 0 0 0}
+.table::after{top:-1px;right:-1px;border-width:1px 1px 0 0;border-radius:0 14px 0 0}
 .art-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.art{display:flex;flex-direction:column;align-items:center;gap:8px;padding:22px 10px;border:1px solid rgba(184,150,46,.06);border-radius:8px;background:rgba(13,10,26,.35);transition:all .35s var(--ease);text-decoration:none;color:var(--bone);position:relative;overflow:hidden}
-.art::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 120%,rgba(184,150,46,.05),transparent 70%);opacity:0;transition:opacity .35s}
-.art:hover{border-color:rgba(184,150,46,.2);transform:translateY(-2px)}
+.art{display:flex;flex-direction:column;align-items:center;gap:9px;padding:24px 10px;border:1px solid rgba(184,150,46,.06);border-radius:10px;background:rgba(13,10,26,.35);transition:all .4s var(--ease);text-decoration:none;color:var(--bone);position:relative;overflow:hidden}
+.art::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 120%,rgba(184,150,46,.06),transparent 65%);opacity:0;transition:opacity .4s}
+.art::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-d),transparent);opacity:0;transition:opacity .4s}
+.art:hover{border-color:rgba(184,150,46,.22);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.2),0 0 20px rgba(184,150,46,.05)}
 .art:hover::before{opacity:1}
-.art-i{width:46px;height:46px;display:grid;place-items:center}
-.art-n{font-size:.76rem;color:var(--tg);letter-spacing:.06em}
-.art-d{font-size:.6rem;color:var(--td);font-style:italic}
+.art:hover::after{opacity:.6}
+.art-i{width:48px;height:48px;display:grid;place-items:center}
+.art-n{font-family:var(--font-title);font-size:.74rem;color:var(--tg);letter-spacing:.08em}
+.art-d{font-size:.58rem;color:var(--td);font-style:italic}
 
 /* Icons */
 .stk{position:relative;width:34px;height:48px}
@@ -116,35 +142,38 @@ textarea{resize:vertical;min-height:80px}
 .dream-icon{font-size:1.3rem;color:var(--gold-d)}
 .iching-icon{font-size:1.2rem;color:var(--gold-d);font-family:monospace;letter-spacing:2px}
 
-.foot{margin-top:40px;padding:14px 0;border-top:1px solid rgba(184,150,46,.04)}
+.foot{margin-top:44px;padding:16px 0;position:relative}
+.foot::before{content:'✦';display:block;text-align:center;font-size:.4rem;color:var(--gold-d);letter-spacing:1em;margin-bottom:12px;opacity:.3}
 .foot p{font-size:.55rem;color:var(--tgh);text-align:center;line-height:1.9}
 
-/* Section titles */
-.sec-title{font-size:1rem;color:var(--tg);font-weight:400;letter-spacing:.08em;margin-bottom:20px;text-align:center}
+/* Section titles — 神圣标题 */
+.sec-title{font-family:var(--font-title);font-size:1.05rem;color:var(--tg);font-weight:500;letter-spacing:.1em;margin-bottom:8px;text-align:center;text-shadow:0 0 15px rgba(184,150,46,.12)}
+.sec-title::after{content:'✦';display:block;margin-top:8px;font-size:.5rem;color:var(--gold-d);letter-spacing:.5em;opacity:.4}
 
-/* Tarot */
+/* Tarot — 神圣占卜 */
 .tc{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 52px);text-align:center}
 .stg{width:100%;display:flex;flex-direction:column;align-items:center;gap:24px}
-.stg h2{font-size:1rem;color:var(--tg);font-weight:400;line-height:2.2;letter-spacing:.04em}
+.stg h2{font-family:var(--font-title);font-size:1rem;color:var(--tg);font-weight:500;line-height:2.2;letter-spacing:.06em;text-shadow:0 0 15px rgba(184,150,46,.1)}
 .stg .sub{font-size:.78rem;color:var(--td);font-style:italic}
 .spread-type{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
-.spread-opt{padding:8px 16px;border:1px solid rgba(184,150,46,.12);border-radius:6px;background:transparent;color:var(--td);font-size:.72rem;letter-spacing:.08em;transition:all .3s}
-.spread-opt:hover,.spread-opt.on{border-color:var(--gold);color:var(--tg);background:rgba(184,150,46,.06)}
+.spread-opt{padding:8px 18px;border:1px solid rgba(184,150,46,.1);border-radius:6px;background:transparent;color:var(--td);font-family:var(--font-title);font-size:.7rem;letter-spacing:.1em;transition:all .3s}
+.spread-opt:hover,.spread-opt.on{border-color:var(--gold);color:var(--tg);background:rgba(184,150,46,.06);box-shadow:0 0 15px rgba(184,150,46,.08)}
 .ccd{display:flex;gap:40px;align-items:flex-end}
 .ccc{display:flex;flex-direction:column;align-items:center;opacity:.15;transition:opacity .9s var(--ease)}
 .ccc.lit{opacity:1}
 .ccf{width:9px;height:16px;background:radial-gradient(ellipse at 50% 100%,var(--ember),rgba(232,163,60,.35) 65%,transparent);border-radius:50% 50% 50% 50%/65% 65% 35% 35%;opacity:0;transition:opacity .6s;animation:fl 2s ease-in-out infinite alternate}
 .ccc.lit .ccf{opacity:1}
 .ccb{width:11px;height:38px;background:linear-gradient(to bottom,#e8dcc8,#c8b8a0);border-radius:2px;margin-top:-1px}
-.spread{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;perspective:900px}
-.card{width:72px;height:106px;position:relative;cursor:pointer;transform-style:preserve-3d;transition:transform .85s var(--ease)}
-.card:hover{transform:translateY(-8px) rotateX(5deg)}
+.spread{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;perspective:900px}
+.card{width:74px;height:108px;position:relative;cursor:pointer;transform-style:preserve-3d;transition:transform .85s var(--ease)}
+.card:hover{transform:translateY(-10px) rotateX(5deg);filter:brightness(1.1)}
 .card.flipped{transform:rotateY(180deg)}
-.card.sel{transform:translateY(-16px) scale(1.06);z-index:10}
-.card-f{position:absolute;inset:0;backface-visibility:visible;border:1px solid var(--gold-d);border-radius:4px;display:grid;place-items:center;background:linear-gradient(145deg,var(--abyss-l),var(--ink));color:var(--gold-d);font-size:1rem;transition:opacity .4s}
-.card-f::before{content:'';position:absolute;inset:3px;border:1px solid rgba(184,150,46,.08);border-radius:2px}
+.card.sel{transform:translateY(-18px) scale(1.08);z-index:10;filter:brightness(1.15)}
+.card-f{position:absolute;inset:0;backface-visibility:visible;border:1px solid var(--gold-d);border-radius:5px;display:grid;place-items:center;background:linear-gradient(145deg,var(--abyss-l),var(--ink));color:var(--gold-d);font-size:1rem;transition:opacity .4s;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.card-f::before{content:'';position:absolute;inset:3px;border:1px solid rgba(184,150,46,.1);border-radius:3px}
+.card-f::after{content:'';position:absolute;inset:6px;border:1px solid rgba(184,150,46,.04);border-radius:2px}
 .card.flipped .card-f{opacity:0}
-.card-b{position:absolute;inset:0;backface-visibility:hidden;transform:rotateY(180deg);border:1px solid var(--gold-d);border-radius:4px;background:var(--abyss-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:5px;font-size:.45rem;color:var(--tg)}
+.card-b{position:absolute;inset:0;backface-visibility:hidden;transform:rotateY(180deg);border:1px solid var(--gold);border-radius:5px;background:radial-gradient(ellipse at 50% 30%,rgba(184,150,46,.06),transparent 60%),var(--abyss-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:5px;font-size:.45rem;color:var(--tg);box-shadow:0 0 20px rgba(184,150,46,.1)}
 .card-b .rev{color:var(--blood);font-size:.4rem;transform:rotate(180deg)}
 .results{display:flex;flex-direction:column;gap:24px;align-items:center}
 .result-card{text-align:center}
@@ -155,20 +184,21 @@ textarea{resize:vertical;min-height:80px}
 .res-txt p{font-size:.88rem;color:var(--tg);line-height:2;margin-bottom:10px}
 .res-txt .ref{font-size:.78rem;color:var(--td);line-height:1.8;font-style:italic}
 .rl{font-size:.55rem;color:var(--tgh);text-align:center;line-height:1.7;margin:14px 0}
-.ink{display:inline;opacity:0;filter:blur(3px);animation:ib .5s var(--ease) forwards}
-@keyframes ib{0%{opacity:0;filter:blur(3px)}60%{opacity:.7;filter:blur(1px)}100%{opacity:1;filter:blur(0)}}
-.gd{position:absolute;width:2px;height:2px;background:var(--gold-b);border-radius:50%;pointer-events:none;animation:df 1.6s ease-out forwards}
-@keyframes df{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+.ink{display:inline;opacity:0;filter:blur(3px);animation:ib .55s var(--ease) forwards}
+@keyframes ib{0%{opacity:0;filter:blur(3px)}50%{opacity:.6;filter:blur(1.5px)}100%{opacity:1;filter:blur(0)}}
+.gd{position:absolute;width:2px;height:2px;background:var(--gold-b);border-radius:50%;pointer-events:none;animation:df 1.8s ease-out forwards;box-shadow:0 0 4px var(--gold-b)}
+@keyframes df{0%{opacity:1;transform:translate(0,0) scale(1)}50%{opacity:.8}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
 
-/* Star Chart */
+/* Star Chart — 神圣星盘 */
 .form-group{margin-bottom:16px;text-align:left}
-.form-group label{display:block;font-size:.72rem;color:var(--td);letter-spacing:.08em;margin-bottom:6px}
-.form-group input{width:100%}
+.form-group label{display:block;font-family:var(--font-title);font-size:.7rem;color:var(--td);letter-spacing:.1em;margin-bottom:6px}
+.form-group input,.form-group select{width:100%;font-family:var(--font-body)}
 .chart-result{text-align:center;margin-top:24px}
-.chart-result .planet{margin-bottom:16px;padding:14px;border:1px solid rgba(184,150,46,.08);border-radius:8px;background:rgba(26,39,68,.1)}
-.chart-result .planet-name{font-size:.7rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
-.chart-result .planet-sign{font-size:.95rem;color:var(--tg);margin-bottom:4px}
-.chart-result .planet-desc{font-size:.75rem;color:var(--td);line-height:1.7}
+.chart-result .planet{margin-bottom:16px;padding:16px;border:1px solid rgba(184,150,46,.1);border-radius:10px;background:radial-gradient(ellipse at 50% 0%,rgba(184,150,46,.04),transparent 60%),rgba(26,39,68,.1);position:relative;overflow:hidden}
+.chart-result .planet::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-d),transparent)}
+.chart-result .planet-name{font-family:var(--font-title);font-size:.68rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.chart-result .planet-sign{font-size:.95rem;color:var(--tg);margin-bottom:5px;text-shadow:0 0 10px rgba(184,150,46,.1)}
+.chart-result .planet-desc{font-size:.75rem;color:var(--td);line-height:1.8}
 
 /* Name Analysis */
 .name-result{text-align:center;margin-top:24px}
@@ -192,14 +222,17 @@ textarea{resize:vertical;min-height:80px}
 .dream-tag{padding:3px 10px;border:1px solid rgba(184,150,46,.12);border-radius:12px;font-size:.6rem;color:var(--tg)}
 .dream-interpret{font-size:.75rem;color:var(--td);line-height:1.7;font-style:italic}
 
-/* Encyclopedia */
-.enc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-.enc-item{padding:14px;border:1px solid rgba(184,150,46,.06);border-radius:8px;background:rgba(26,39,68,.08);text-align:center;transition:all .3s;cursor:pointer}
-.enc-item:hover{border-color:rgba(184,150,46,.2);background:rgba(26,39,68,.18)}
-.enc-sym{font-size:1.5rem;margin-bottom:4px}
-.enc-name{font-size:.68rem;color:var(--tg);letter-spacing:.06em}
-.enc-detail{margin-top:20px;padding:20px;border:1px solid rgba(184,150,46,.1);border-radius:10px;background:rgba(26,39,68,.12)}
-.enc-detail h3{font-size:.9rem;color:var(--tg);font-weight:400;margin-bottom:8px}
+/* Encyclopedia — 神圣图鉴 */
+.enc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.enc-item{padding:16px 10px;border:1px solid rgba(184,150,46,.06);border-radius:10px;background:radial-gradient(ellipse at 50% 100%,rgba(184,150,46,.03),transparent 60%),rgba(26,39,68,.08);text-align:center;transition:all .35s var(--ease);cursor:pointer;position:relative;overflow:hidden}
+.enc-item::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:24px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-d),transparent);opacity:0;transition:opacity .35s}
+.enc-item:hover{border-color:rgba(184,150,46,.2);transform:translateY(-2px);box-shadow:0 4px 15px rgba(0,0,0,.2)}
+.enc-item:hover::before{opacity:.6}
+.enc-sym{font-size:1.6rem;margin-bottom:5px;text-shadow:0 0 10px rgba(184,150,46,.15)}
+.enc-name{font-family:var(--font-title);font-size:.65rem;color:var(--tg);letter-spacing:.08em}
+.enc-detail{margin-top:20px;padding:20px;border:1px solid rgba(184,150,46,.1);border-radius:12px;background:radial-gradient(ellipse at 50% 0%,rgba(184,150,46,.04),transparent 50%),rgba(26,39,68,.12);position:relative}
+.enc-detail::before{content:'';position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.enc-detail h3{font-family:var(--font-title);font-size:.9rem;color:var(--tg);font-weight:500;margin-bottom:10px;letter-spacing:.06em}
 .enc-detail p{font-size:.78rem;color:var(--td);line-height:1.9}
 
 /* Daily */
@@ -212,13 +245,16 @@ textarea{resize:vertical;min-height:80px}
 .dc-h{width:34px;height:6px;background:linear-gradient(to bottom,var(--gold-d),#6a5520);border-radius:2px;margin-top:2px}
 .dm{font-size:.95rem;color:var(--tg);line-height:2.4;max-width:360px;margin:0 auto}
 
-/* Records */
-.alc{text-align:center;margin-bottom:24px}
-.alc h2{font-size:1.15rem;color:var(--tg);font-weight:400;letter-spacing:.1em;margin-bottom:4px}
+/* Records — 神圣壁龛 */
+.alc{text-align:center;margin-bottom:28px}
+.alc h2{font-family:var(--font-title);font-size:1.2rem;color:var(--tg);font-weight:500;letter-spacing:.12em;margin-bottom:5px;text-shadow:0 0 15px rgba(184,150,46,.1)}
+.alc h2::after{content:'✦';display:block;margin-top:6px;font-size:.45rem;color:var(--gold-d);letter-spacing:.5em;opacity:.4}
 .alc p{font-size:.72rem;color:var(--td);font-style:italic}
 .rl2{display:flex;flex-direction:column;gap:10px}
-.rec{padding:14px;border:1px solid rgba(184,150,46,.06);border-radius:8px;background:rgba(26,39,68,.06);transition:all .3s;cursor:pointer}
-.rec:hover{border-color:rgba(184,150,46,.15);background:rgba(26,39,68,.15)}
+.rec{padding:16px;border:1px solid rgba(184,150,46,.06);border-radius:10px;background:radial-gradient(ellipse at 50% 0%,rgba(184,150,46,.03),transparent 50%),rgba(26,39,68,.06);transition:all .35s var(--ease);cursor:pointer;position:relative;overflow:hidden}
+.rec::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-d),transparent);opacity:0;transition:opacity .35s}
+.rec:hover{border-color:rgba(184,150,46,.18);transform:translateY(-1px);box-shadow:0 4px 15px rgba(0,0,0,.15)}
+.rec:hover::before{opacity:.5}
 .rec-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .rec-t{font-size:.62rem;color:var(--gold);letter-spacing:.08em;text-transform:uppercase}
 .rec-d{font-size:.52rem;color:var(--tgh)}
@@ -228,13 +264,13 @@ textarea{resize:vertical;min-height:80px}
 .re{text-align:center;padding:40px 14px}
 .re p{font-size:.78rem;color:var(--td);line-height:2.2;font-style:italic}
 
-/* Settings */
+/* Settings — 神圣暗格 */
 .set{position:fixed;inset:0;z-index:200}
-.set-o{position:absolute;inset:0;background:rgba(8,6,26,.6)}
-.set-d{position:absolute;bottom:0;left:0;right:0;background:var(--abyss-l);border-top:1px solid rgba(184,150,46,.1);border-radius:14px 14px 0 0;padding:20px;transform:translateY(100%);transition:transform .5s var(--ease);max-height:60vh;overflow-y:auto}
+.set-o{position:absolute;inset:0;background:rgba(8,6,26,.65);backdrop-filter:blur(4px)}
+.set-d{position:absolute;bottom:0;left:0;right:0;background:var(--abyss-l);border-top:1px solid rgba(184,150,46,.12);border-radius:16px 16px 0 0;padding:24px;transform:translateY(100%);transition:transform .5s var(--ease);max-height:60vh;overflow-y:auto;box-shadow:0 -4px 30px rgba(0,0,0,.3)}
 .set.vis .set-d{transform:translateY(0)}
-.set-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.set-h h3{font-size:.78rem;color:var(--tg);font-weight:400;letter-spacing:.1em}
+.set-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.set-h h3{font-family:var(--font-title);font-size:.78rem;color:var(--tg);font-weight:500;letter-spacing:.12em}
 .set-x{background:none;border:none;color:var(--td);font-size:1.1rem}
 .set-i{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(184,150,46,.04)}
 .set-i label{font-size:.78rem;color:var(--bone)}
@@ -289,7 +325,7 @@ textarea{resize:vertical;min-height:80px}
 <!-- HOME -->
 <section class="page on" id="p-home"><div class="pg">
 <div class="hero"><h1>欢迎回来，旅人。</h1><p id="welcome-msg">今天的星辰与你上次离开时不同了。你也是。</p></div>
-<div class="moon-info" id="moon-info"></div>
+<div class="moon-info-wrap"><span class="moon-info" id="moon-info"></span></div>
 <div class="table"><div class="art-grid">
 <a href="#" class="art" data-p="tarot"><div class="art-i"><div class="stk"><div>✦</div><div>✦</div><div>✦</div></div></div><span class="art-n">塔罗占卜</span><span class="art-d">桌上的牌</span></a>
 <a href="#" class="art" data-p="star"><div class="art-i"><div class="ast"><div class="ast-r"></div><div class="ast-r ast-r2"></div><div class="ast-c">✦</div></div></div><span class="art-n">星盘分析</span><span class="art-d">天球仪</span></a>
@@ -397,7 +433,7 @@ textarea{resize:vertical;min-height:80px}
 <div class="smoke" id="smoke"><div class="sm"></div><div class="sm"></div><div class="sm"></div></div>
 
 <script>
-const FX={c:null,p:[],on:true,init(){this.c=document.getElementById('fx');this.ctx=this.c.getContext('2d');this.resize();window.onresize=()=>this.resize();this.loop()},resize(){this.c.width=innerWidth;this.c.height=innerHeight},loop(){if(!this.on){this.ctx.clearRect(0,0,this.c.width,this.c.height);requestAnimationFrame(()=>this.loop());return}this.ctx.clearRect(0,0,this.c.width,this.c.height);if(Math.random()<.03)this.p.push({t:'e',x:Math.random()*this.c.width,y:this.c.height+10,vx:(Math.random()-.5)*.3,vy:-(Math.random()*.7+.2),s:Math.random()*2+.8,l:1,d:Math.random()*.003+.001,c:Math.random()>.5?'#e8a33c':'#b8962e'});if(Math.random()<.05)this.p.push({t:'d',x:Math.random()*this.c.width,y:Math.random()*this.c.height,vx:(Math.random()-.5)*.08,vy:Math.random()*.04,s:Math.random()*1.5+.4,l:1,d:Math.random()*.002+.0004,c:'#c0c0d0',w:Math.random()*6.28});if(Math.random()<.003){const sy='✦☽☿♃♄☉△◇'.split('');this.p.push({t:'r',x:Math.random()*this.c.width,y:Math.random()*this.c.height,sy:sy[Math.floor(Math.random()*sy.length)],s:Math.random()*11+7,l:1,d:.028,c:'#b8962e'})}this.p=this.p.filter(p=>{p.l-=p.d;if(p.l<=0)return false;if(p.t==='e'){p.x+=p.vx+Math.sin(p.y*.008)*.25;p.y+=p.vy;this.ctx.globalAlpha=p.l*.7;this.ctx.fillStyle=p.c;this.ctx.beginPath();this.ctx.arc(p.x,p.y,p.s,0,6.28);this.ctx.fill();this.ctx.globalAlpha=p.l*.12;this.ctx.beginPath();this.ctx.arc(p.x,p.y,p.s*3,0,6.28);this.ctx.fill()}if(p.t==='d'){p.x+=p.vx;p.y+=p.vy;p.w+=.015;this.ctx.globalAlpha=p.l*((Math.sin(p.w)+1)/2)*.4;this.ctx.fillStyle=p.c;this.ctx.beginPath();this.ctx.arc(p.x,p.y,p.s,0,6.28);this.ctx.fill()}if(p.t==='r'){this.ctx.globalAlpha=p.l;this.ctx.fillStyle=p.c;this.ctx.font=p.s+'px Georgia,serif';this.ctx.textAlign='center';this.ctx.fillText(p.sy,p.x,p.y)}this.ctx.globalAlpha=1;return true});requestAnimationFrame(()=>this.loop())}};
+const FX={c:null,p:[],on:true,init(){this.c=document.getElementById('fx');this.ctx=this.c.getContext('2d');this.resize();window.onresize=()=>this.resize();this.loop()},resize(){this.c.width=innerWidth;this.c.height=innerHeight},loop(){if(!this.on){this.ctx.clearRect(0,0,this.c.width,this.c.height);requestAnimationFrame(()=>this.loop());return}this.ctx.clearRect(0,0,this.c.width,this.c.height);if(Math.random()<.03)this.p.push({t:'e',x:Math.random()*this.c.width,y:this.c.height+10,vx:(Math.random()-.5)*.3,vy:-(Math.random()*.7+.2),s:Math.random()*2+.8,l:1,d:Math.random()*.003+.001,c:Math.random()>.5?'#e8a33c':'#b8962e'});if(Math.random()<.05)this.p.push({t:'d',x:Math.random()*this.c.width,y:Math.random()*this.c.height,vx:(Math.random()-.5)*.08,vy:Math.random()*.04,s:Math.random()*1.5+.4,l:1,d:Math.random()*.002+.0004,c:'#c0c0d0',w:Math.random()*6.28});if(Math.random()<.003){const sy='✦☽☿♃♄☉△◇'.split('');this.p.push({t:'r',x:Math.random()*this.c.width,y:Math.random()*this.c.height,sy:sy[Math.floor(Math.random()*sy.length)],s:Math.random()*11+7,l:1,d:.028,c:'#b8962e'})}this.p=this.p.filter(p=>{p.l-=p.d;if(p.l<=0)return false;if(p.t==='e'){p.x+=p.vx+Math.sin(p.y*.008)*.25;p.y+=p.vy;this.ctx.globalAlpha=p.l*.7;this.ctx.fillStyle=p.c;this.ctx.beginPath();this.ctx.arc(p.x,p.y,p.s,0,6.28);this.ctx.fill();this.ctx.globalAlpha=p.l*.12;this.ctx.beginPath();this.ctx.arc(p.x,p.y,p.s*3,0,6.28);this.ctx.fill()}if(p.t==='d'){p.x+=p.vx;p.y+=p.vy;p.w+=.015;this.ctx.globalAlpha=p.l*((Math.sin(p.w)+1)/2)*.4;this.ctx.fillStyle=p.c;this.ctx.beginPath();this.ctx.arc(p.x,p.y,p.s,0,6.28);this.ctx.fill()}if(p.t==='r'){this.ctx.globalAlpha=p.l;this.ctx.fillStyle=p.c;this.ctx.font=p.s+'px serif';this.ctx.textAlign='center';this.ctx.fillText(p.sy,p.x,p.y)}this.ctx.globalAlpha=1;return true});requestAnimationFrame(()=>this.loop())}};
 const AU={c:null,on:false,amb:null,toggle(){if(!this.c)this.c=new(window.AudioContext||window.webkitAudioContext)();this.on=!this.on;if(this.on){const o=this.c.createOscillator(),g=this.c.createGain();o.connect(g);g.connect(this.c.destination);o.frequency.value=55;o.type='sine';g.gain.value=.01;o.start();this.amb={o,g};this.bT=setInterval(()=>this.bell(),30000)}else{if(this.amb){this.amb.g.gain.exponentialRampToValueAtTime(.001,this.c.currentTime+.5);setTimeout(()=>{try{this.amb.o.stop()}catch(e){}this.amb=null},500)}if(this.bT){clearInterval(this.bT);this.bT=null}}return this.on},click(){if(!this.on||!this.c)return;const o=this.c.createOscillator(),g=this.c.createGain();o.connect(g);g.connect(this.c.destination);o.frequency.value=880;o.type='sine';g.gain.setValueAtTime(.05,this.c.currentTime);g.gain.exponentialRampToValueAtTime(.001,this.c.currentTime+.1);o.start();o.stop(this.c.currentTime+.1)},success(){if(!this.on||!this.c)return;[523,659,784].forEach((f,i)=>{const o=this.c.createOscillator(),g=this.c.createGain();o.connect(g);g.connect(this.c.destination);o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(0,this.c.currentTime+i*.12);g.gain.linearRampToValueAtTime(.04,this.c.currentTime+i*.12+.06);g.gain.exponentialRampToValueAtTime(.001,this.c.currentTime+i*.12+1.8);o.start(this.c.currentTime+i*.12);o.stop(this.c.currentTime+i*.12+1.8)})},flip(){if(!this.on||!this.c)return;const n=this.c.createBufferSource(),b=this.c.createBuffer(1,this.c.sampleRate*.08,this.c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(this.c.sampleRate*.015));n.buffer=b;const g=this.c.createGain(),f=this.c.createBiquadFilter();f.type='highpass';f.frequency.value=2500;n.connect(f);f.connect(g);g.connect(this.c.destination);g.gain.value=.04;n.start()},bell(){if(!this.on||!this.c)return;const o=this.c.createOscillator(),g=this.c.createGain();o.connect(g);g.connect(this.c.destination);o.frequency.value=220;o.type='sine';g.gain.setValueAtTime(.012,this.c.currentTime);g.gain.exponentialRampToValueAtTime(.001,this.c.currentTime+3.5);o.start();o.stop(this.c.currentTime+3.5)}};
 
 // TAROT DATA (78 cards)
