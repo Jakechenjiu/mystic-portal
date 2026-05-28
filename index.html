@@ -2,325 +2,301 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>从心而书 · 神秘学殿堂</title>
-<!-- 字体使用系统字体，避免国内加载卡死 -->
-<link rel="stylesheet" href="styles.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--abyss:#0d0a1a;--abyss-l:#151028;--abyss-d:#08061a;--gold:#b8962e;--gold-d:#8a6f20;--gold-b:#d4af37;--ember:#e8a33c;--ink:#1a2744;--bone:#e8e0d0;--tg:#c8a84e;--td:#807868;--tgh:#504840;--blood:#6b1c1c;--ease:cubic-bezier(.16,1,.3,1)}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:Georgia,'Noto Serif SC','SimSun',serif;background:var(--abyss);color:var(--bone);min-height:100vh;overflow-x:hidden;line-height:1.7}
+::selection{background:rgba(184,150,46,.3)}
+button{font-family:inherit;cursor:pointer}
+.hidden{display:none!important}
+
+/* ── Canvas ── */
+#fx{position:fixed;inset:0;z-index:1;pointer-events:none}
+
+/* ── Age Gate ── */
+.age{position:fixed;inset:0;z-index:900;display:grid;place-items:center;background:rgba(8,6,26,.97);transition:opacity .6s}
+.age.out{opacity:0;pointer-events:none}
+.age-box{text-align:center;max-width:340px;padding:40px 24px}
+.age-box h2{font-size:1.1rem;color:var(--tg);font-weight:400;letter-spacing:.06em;margin-bottom:14px}
+.age-box p{font-size:.78rem;color:var(--td);line-height:1.9;margin-bottom:28px}
+.age-btns{display:flex;gap:12px;justify-content:center}
+
+/* ── Buttons ── */
+.btn{padding:12px 30px;background:transparent;border:1px solid var(--gold);color:var(--tg);font-size:.88rem;letter-spacing:.12em;transition:all .35s var(--ease)}
+.btn:hover{border-color:var(--gold-b);color:var(--bone);box-shadow:0 0 30px rgba(184,150,46,.12)}
+.btn:active{transform:scale(.97)}
+.btn2{border-color:var(--gold-d);color:var(--td);font-size:.8rem}
+
+/* ── Nav ── */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:linear-gradient(to top,var(--abyss-d) 60%,rgba(8,6,26,.9));border-top:1px solid rgba(184,150,46,.06)}
+.nav-b{display:flex;align-items:center;gap:7px}
+.nav-s{font-size:1rem;color:var(--gold)}
+.nav-t{font-size:.72rem;color:var(--tg);letter-spacing:.12em}
+.nav-l{display:flex;gap:20px}
+.nl{font-size:.62rem;color:var(--td);letter-spacing:.14em;text-transform:uppercase;transition:color .3s;position:relative;padding-bottom:5px}
+.nl:hover,.nl.on{color:var(--tg)}
+.nl.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--gold)}
+.nav-cog{background:none;border:none;color:var(--td);font-size:.9rem}
+
+/* ── Pages ── */
+.page{display:none;min-height:calc(100vh - 56px)}
+.page.on{display:block;animation:fi .5s var(--ease)}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.pg{max-width:540px;margin:0 auto;padding:48px 20px 80px}
+
+/* Home */
+.hero{text-align:center;margin-bottom:48px;padding-top:28px}
+.hero h1{font-size:clamp(1.3rem,4.5vw,1.8rem);color:var(--tg);font-weight:400;letter-spacing:.08em;margin-bottom:6px}
+.hero p{font-size:.88rem;color:var(--td);font-style:italic}
+.table{padding:24px;border:1px solid rgba(184,150,46,.08);border-radius:14px;background:radial-gradient(ellipse at 50% 0%,rgba(184,150,46,.04),transparent 55%),var(--abyss-l)}
+.art-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.art{display:flex;flex-direction:column;align-items:center;gap:10px;padding:28px 14px;border:1px solid rgba(184,150,46,.06);border-radius:10px;background:rgba(13,10,26,.35);transition:all .4s var(--ease);text-decoration:none;color:var(--bone)}
+.art:hover{border-color:rgba(184,150,46,.2);transform:translateY(-3px);background:rgba(26,39,68,.25)}
+.art-off{opacity:.35;pointer-events:none}
+.art-i{width:52px;height:52px;display:grid;place-items:center}
+.art-n{font-size:.82rem;color:var(--tg);letter-spacing:.08em}
+.art-d{font-size:.66rem;color:var(--td);font-style:italic}
+.art-s{font-size:.55rem;color:var(--tgh);letter-spacing:.1em;margin-top:2px}
+
+/* Card Stack */
+.stk{position:relative;width:36px;height:50px}
+.stk div{position:absolute;width:32px;height:46px;border:1px solid var(--gold-d);border-radius:3px;background:var(--abyss-l);display:grid;place-items:center;color:var(--gold-d);font-size:.6rem}
+.stk div:nth-child(1){transform:rotate(-8deg);left:0;top:2px}
+.stk div:nth-child(2){left:2px;top:0}
+.stk div:nth-child(3){transform:rotate(8deg);left:4px;top:2px}
+
+/* Astrolabe */
+.ast{position:relative;width:48px;height:48px}
+.ast-r{position:absolute;inset:0;border:1px solid var(--gold-d);border-radius:50%;animation:spin 22s linear infinite}
+.ast-r2{inset:7px;animation-direction:reverse;animation-duration:16s}
+.ast-c{position:absolute;inset:0;display:grid;place-items:center;color:var(--gold-d)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Parchment */
+.pch{width:30px;height:42px;border:1px solid var(--gold-d);border-radius:2px;padding:8px 5px;display:flex;flex-direction:column;gap:5px;background:rgba(26,39,68,.25)}
+.pch span{height:1px;background:var(--gold-d);opacity:.35}
+.pch span:last-child{width:55%}
+
+/* Candle Icon */
+.ci{display:flex;flex-direction:column;align-items:center}
+.cf-s{width:7px;height:13px;background:radial-gradient(ellipse at 50% 100%,var(--ember),rgba(232,163,60,.25) 65%,transparent);border-radius:50% 50% 50% 50%/65% 65% 35% 35%;animation:fl 2.5s ease-in-out infinite alternate}
+.cb-s{width:9px;height:26px;background:linear-gradient(to bottom,#e8dcc8,#c8b8a0);border-radius:1px;margin-top:-1px}
+@keyframes fl{0%{opacity:.85}50%{opacity:1}100%{opacity:.9}}
+
+.foot{margin-top:48px;padding:16px 0;border-top:1px solid rgba(184,150,46,.04)}
+.foot p{font-size:.58rem;color:var(--tgh);text-align:center;line-height:1.9}
+
+/* ── Tarot ── */
+.tc{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 56px);text-align:center}
+.stg{width:100%;display:flex;flex-direction:column;align-items:center;gap:28px}
+.stg h2{font-size:1.05rem;color:var(--tg);font-weight:400;line-height:2.4;letter-spacing:.04em}
+.stg .sub{font-size:.82rem;color:var(--td);font-style:italic}
+
+/* Candle Countdown */
+.ccd{display:flex;gap:44px;align-items:flex-end}
+.ccc{display:flex;flex-direction:column;align-items:center;opacity:.15;transition:opacity .9s var(--ease)}
+.ccc.lit{opacity:1}
+.ccf{width:10px;height:18px;background:radial-gradient(ellipse at 50% 100%,var(--ember),rgba(232,163,60,.35) 65%,transparent);border-radius:50% 50% 50% 50%/65% 65% 35% 35%;opacity:0;transition:opacity .6s;animation:fl 2s ease-in-out infinite alternate}
+.ccc.lit .ccf{opacity:1}
+.ccb{width:12px;height:40px;background:linear-gradient(to bottom,#e8dcc8,#c8b8a0);border-radius:2px;margin-top:-1px}
+
+/* Card Spread */
+.spread{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;perspective:900px}
+.card{width:76px;height:112px;position:relative;cursor:pointer;transform-style:preserve-3d;transition:transform .85s var(--ease)}
+.card:hover{transform:translateY(-10px) rotateX(5deg)}
+.card.flipped{transform:rotateY(180deg)}
+.card.sel{transform:translateY(-18px) scale(1.06);z-index:10}
+.card-f{position:absolute;inset:0;backface-visibility:visible;border:1px solid var(--gold-d);border-radius:5px;display:grid;place-items:center;background:linear-gradient(145deg,var(--abyss-l),var(--ink));color:var(--gold-d);font-size:1.1rem;transition:opacity .4s}
+.card-f::before{content:'';position:absolute;inset:4px;border:1px solid rgba(184,150,46,.1);border-radius:3px}
+.card.flipped .card-f{opacity:0}
+.card-b{position:absolute;inset:0;backface-visibility:hidden;transform:rotateY(180deg);border:1px solid var(--gold-d);border-radius:5px;background:var(--abyss-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px;font-size:.5rem;color:var(--tg)}
+
+/* Result */
+.rf{width:128px;height:185px;margin:0 auto 24px;border:2px solid var(--gold);border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:radial-gradient(ellipse at 50% 40%,rgba(184,150,46,.06),transparent 65%),var(--abyss-l);box-shadow:0 0 60px rgba(184,150,46,.08);position:relative}
+.rf::before{content:'';position:absolute;inset:5px;border:1px solid rgba(184,150,46,.12);border-radius:5px}
+.rn{font-size:.78rem;color:var(--tg);letter-spacing:.1em}
+.rs{font-size:2.4rem;color:var(--gold);text-shadow:0 0 20px rgba(184,150,46,.2)}
+.rtb{max-width:380px;margin:0 auto 16px}
+.rtb p{font-size:.92rem;color:var(--tg);line-height:2.1;margin-bottom:12px}
+.rtb .ref{font-size:.82rem;color:var(--td);line-height:1.9;font-style:italic}
+.rl{font-size:.58rem;color:var(--tgh);text-align:center;line-height:1.7;margin:18px 0}
+
+/* Ink */
+.ink{display:inline;opacity:0;filter:blur(3px);animation:ib .55s var(--ease) forwards}
+@keyframes ib{0%{opacity:0;filter:blur(3px)}60%{opacity:.7;filter:blur(1px)}100%{opacity:1;filter:blur(0)}}
+
+/* Gold Dust */
+.gd{position:absolute;width:2px;height:2px;background:var(--gold-b);border-radius:50%;pointer-events:none;animation:df 1.6s ease-out forwards}
+@keyframes df{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+
+/* ── Daily ── */
+.dc{display:flex;flex-direction:column;align-items:center;gap:28px}
+.dcandle{display:flex;flex-direction:column;align-items:center;position:relative}
+.dc-f{width:14px;height:26px;background:radial-gradient(ellipse at 50% 100%,var(--ember),rgba(232,163,60,.35) 55%,transparent);border-radius:50% 50% 50% 50%/65% 65% 35% 35%;animation:fl 3s ease-in-out infinite alternate;position:relative}
+.dc-f::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:40px;height:40px;background:radial-gradient(circle,rgba(232,163,60,.1),transparent 70%);border-radius:50%}
+.dc-b{width:16px;height:72px;background:linear-gradient(to bottom,#ede4d4,#e0d4c0,#d4c8b4,#c8bca8);border-radius:2px;margin-top:-2px;position:relative}
+.dc-b::before{content:'';position:absolute;top:0;right:-3px;width:5px;height:18px;background:linear-gradient(to bottom,#ede4d4,transparent);border-radius:0 0 3px 3px;opacity:.5}
+.dc-h{width:38px;height:7px;background:linear-gradient(to bottom,var(--gold-d),#6a5520);border-radius:2px;margin-top:2px}
+.dm{font-size:1.02rem;color:var(--tg);line-height:2.4;max-width:380px;margin:0 auto}
+
+/* ── Records ── */
+.alc{text-align:center;margin-bottom:28px}
+.alc h2{font-size:1.25rem;color:var(--tg);font-weight:400;letter-spacing:.12em;margin-bottom:5px}
+.alc p{font-size:.78rem;color:var(--td);font-style:italic}
+.rl2{display:flex;flex-direction:column;gap:10px}
+.rec{padding:16px;border:1px solid rgba(184,150,46,.06);border-radius:10px;background:rgba(26,39,68,.08);transition:all .35s var(--ease);cursor:pointer}
+.rec:hover{border-color:rgba(184,150,46,.18);background:rgba(26,39,68,.18)}
+.rec-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.rec-t{font-size:.68rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase}
+.rec-d{font-size:.58rem;color:var(--tgh)}
+.rec-n{font-size:.9rem;color:var(--tg);margin-bottom:3px}
+.rec-p{font-size:.76rem;color:var(--td);line-height:1.7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rec-x{margin-top:7px;font-size:.58rem;color:var(--tgh);background:none;border:none;font-family:inherit;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.rec-x:hover{color:var(--blood)}
+.re{text-align:center;padding:48px 16px}
+.re p{font-size:.82rem;color:var(--td);line-height:2.4;font-style:italic}
+
+/* ── Settings ── */
+.set{position:fixed;inset:0;z-index:200}
+.set-o{position:absolute;inset:0;background:rgba(8,6,26,.65)}
+.set-d{position:absolute;bottom:0;left:0;right:0;background:var(--abyss-l);border-top:1px solid rgba(184,150,46,.1);border-radius:16px 16px 0 0;padding:24px;transform:translateY(100%);transition:transform .5s var(--ease)}
+.set.vis .set-d{transform:translateY(0)}
+.set-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.set-h h3{font-size:.82rem;color:var(--tg);font-weight:400;letter-spacing:.1em}
+.set-x{background:none;border:none;color:var(--td);font-size:1.15rem}
+.set-i{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(184,150,46,.04)}
+.set-i label{font-size:.82rem;color:var(--bone)}
+.set-l{margin-top:18px;padding-top:16px;border-top:1px solid rgba(184,150,46,.04)}
+.set-l p{font-size:.62rem;color:var(--tgh);line-height:1.7;margin-bottom:10px}
+.set-b{background:none;border:none;color:var(--gold-d);font-size:.72rem;font-family:inherit;text-decoration:underline;text-underline-offset:3px}
+
+/* ── Smoke ── */
+.smoke{position:fixed;inset:0;z-index:90;pointer-events:none;opacity:0}
+.smoke.on{opacity:1;pointer-events:all}
+.sm{position:absolute;inset:0;background:var(--abyss-d);opacity:0}
+.smoke.on .sm{animation:si .45s ease-out forwards}
+.smoke.on .sm:nth-child(2){animation-delay:.08s}
+.smoke.on .sm:nth-child(3){animation-delay:.16s}
+.smoke.out .sm{animation:so .45s ease-in forwards}
+.smoke.out .sm:nth-child(3){animation-delay:.08s}
+.smoke.out .sm:nth-child(2){animation-delay:.16s}
+@keyframes si{from{opacity:0;filter:blur(14px)}to{opacity:1;filter:blur(0)}}
+@keyframes so{from{opacity:1;filter:blur(0)}to{opacity:0;filter:blur(10px)}}
+
+@media(max-width:480px){
+  .art-grid{grid-template-columns:1fr}
+  .art{flex-direction:row;padding:14px 18px;gap:12px;text-align:left}
+  .art-i{width:42px;height:42px}
+  .nav-b{display:none}
+  .nav-l{gap:14px}
+  .card{width:60px;height:90px}
+  .ccd{gap:30px}
+}
+</style>
 </head>
 <body>
 
-<!-- ==================== 粒子画布 ==================== -->
-<canvas id="particles-canvas"></canvas>
+<canvas id="fx"></canvas>
 
-<!-- ==================== 音频控制 ==================== -->
-<button id="audio-toggle" class="audio-btn" aria-label="切换音效">
-  <span class="audio-icon">🔇</span>
-</button>
-
-<!-- ==================== 启动画面 ==================== -->
-<div id="splash" class="splash">
-  <div class="splash-content">
-    <div class="rune-container">
-      <svg class="rune-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <!-- 生命之花几何图形 -->
-        <defs>
-          <filter id="rune-glow">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
-            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-          </filter>
-          <linearGradient id="rune-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#b8962e;stop-opacity:0"/>
-            <stop offset="50%" style="stop-color:#e8a33c;stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:#b8962e;stop-opacity:0"/>
-          </linearGradient>
-        </defs>
-        <!-- 外圈 -->
-        <circle cx="100" cy="100" r="80" fill="none" stroke="url(#rune-gradient)" stroke-width="0.5" class="rune-circle rune-circle-1"/>
-        <circle cx="100" cy="100" r="60" fill="none" stroke="url(#rune-gradient)" stroke-width="0.5" class="rune-circle rune-circle-2"/>
-        <circle cx="100" cy="100" r="40" fill="none" stroke="url(#rune-gradient)" stroke-width="0.5" class="rune-circle rune-circle-3"/>
-        <!-- 六芒星 -->
-        <polygon points="100,20 140,80 180,140 100,180 20,140 60,80" fill="none" stroke="url(#rune-gradient)" stroke-width="0.8" class="rune-hex" filter="url(#rune-glow)"/>
-        <!-- 中心符号 -->
-        <text x="100" y="108" text-anchor="middle" class="rune-symbol" fill="#e8a33c" font-size="28" opacity="0">☿</text>
-      </svg>
-    </div>
-    <div class="splash-text">
-      <p class="splash-line splash-line-1">你找到了这扇门。</p>
-      <p class="splash-line splash-line-2">这不是巧合。</p>
-      <p class="splash-line splash-line-3">在你出生的那一刻，</p>
-      <p class="splash-line splash-line-4">星辰就已经写好了这个时刻。</p>
-    </div>
-    <button id="enter-btn" class="btn-ritual splash-enter">
-      <span class="btn-text">我准备好了</span>
-      <span class="btn-glow"></span>
-    </button>
-  </div>
-  <!-- 门扉 -->
-  <div class="door-container">
-    <div class="door door-left">
-      <div class="door-panel">
-        <div class="door-symbol">☽</div>
-        <div class="door-ornament"></div>
-      </div>
-    </div>
-    <div class="door door-right">
-      <div class="door-panel">
-        <div class="door-symbol">☾</div>
-        <div class="door-ornament"></div>
-      </div>
+<!-- Age Gate -->
+<div class="age" id="age">
+  <div class="age-box">
+    <h2>你已年满18岁吗？</h2>
+    <p>你还年轻，星辰为你保留了最多的可能性。<br>这些解读可以参考，但不要让它替你做决定。</p>
+    <div class="age-btns">
+      <button class="btn" id="ayes">我已成年</button>
+      <button class="btn btn2" id="ano">我还未成年</button>
     </div>
   </div>
 </div>
 
-<!-- ==================== 主应用 ==================== -->
-<div id="app" class="app hidden">
-
-  <!-- 导航栏 -->
+<!-- App -->
+<div class="app" id="app">
   <nav class="nav">
-    <div class="nav-brand">
-      <span class="nav-symbol">☿</span>
-      <span class="nav-title">从心而书</span>
+    <div class="nav-b"><span class="nav-s">☿</span><span class="nav-t">从心而书</span></div>
+    <div class="nav-l">
+      <a href="#" class="nl on" data-p="home">密室</a>
+      <a href="#" class="nl" data-p="tarot">塔罗</a>
+      <a href="#" class="nl" data-p="daily">启示</a>
+      <a href="#" class="nl" data-p="records">壁龛</a>
     </div>
-    <div class="nav-links">
-      <a href="#home" class="nav-link active" data-page="home">密室</a>
-      <a href="#tarot" class="nav-link" data-page="tarot">塔罗</a>
-      <a href="#daily" class="nav-link" data-page="daily">启示</a>
-      <a href="#records" class="nav-link" data-page="records">壁龛</a>
-    </div>
-    <button class="nav-settings" id="settings-btn" aria-label="设置">
-      <span>⚙</span>
-    </button>
+    <button class="nav-cog" id="cog">⚙</button>
   </nav>
 
-  <!-- ==================== 首页：密室之门 ==================== -->
-  <section id="page-home" class="page page-home active">
-    <div class="page-inner">
-      <div class="chamber-welcome">
-        <p class="welcome-text">欢迎回来，旅人。</p>
-        <p class="welcome-sub">今天的星辰与你上次离开时不同了。你也是。</p>
-      </div>
+  <section class="page on" id="p-home"><div class="pg">
+    <div class="hero"><h1>欢迎回来，旅人。</h1><p>今天的星辰与你上次离开时不同了。你也是。</p></div>
+    <div class="table"><div class="art-grid">
+      <a href="#" class="art" data-p="tarot"><div class="art-i"><div class="stk"><div>✦</div><div>✦</div><div>✦</div></div></div><span class="art-n">塔罗占卜</span><span class="art-d">桌上的牌</span></a>
+      <div class="art art-off"><div class="art-i"><div class="ast"><div class="ast-r"></div><div class="ast-r ast-r2"></div><div class="ast-c">✦</div></div></div><span class="art-n">星盘分析</span><span class="art-d">天球仪</span><span class="art-s">即将开启</span></div>
+      <div class="art art-off"><div class="art-i"><div class="pch"><span></span><span></span><span></span></div></div><span class="art-n">姓名测算</span><span class="art-d">羊皮纸</span><span class="art-s">即将开启</span></div>
+      <a href="#" class="art" data-p="daily"><div class="art-i"><div class="ci"><div class="cf-s"></div><div class="cb-s"></div></div></div><span class="art-n">每日启示</span><span class="art-d">桌角的蜡烛</span></a>
+    </div></div>
+    <div class="foot"><p>本小程序提供文化与娱乐性质的象征解读服务，不构成任何形式的预测、建议或决策依据。人生的选择权始终在你手中。</p></div>
+  </div></section>
 
-      <div class="chamber-table">
-        <div class="table-surface">
-          <!-- 器物入口 -->
-          <div class="artifacts-grid">
-            <a href="#tarot" class="artifact" data-page="tarot">
-              <div class="artifact-icon">
-                <div class="card-stack">
-                  <div class="card card-1"></div>
-                  <div class="card card-2"></div>
-                  <div class="card card-3"></div>
-                </div>
-              </div>
-              <span class="artifact-name">塔罗占卜</span>
-              <span class="artifact-desc">桌上的牌</span>
-            </a>
+  <section class="page" id="p-tarot"><div class="pg tc">
+    <div class="stg" id="ti"><h2>在翻开牌面之前，请在心中默念你的问题。</h2><p class="sub">不必说出声——牌听得见。</p><button class="btn" id="tbegin">开始占卜</button></div>
+    <div class="stg hidden" id="tp"><h2>深呼吸。想你的问题。</h2><div class="ccd"><div class="ccc" id="c1"><div class="ccf"></div><div class="ccb"></div></div><div class="ccc" id="c2"><div class="ccf"></div><div class="ccb"></div></div><div class="ccc" id="c3"><div class="ccf"></div><div class="ccb"></div></div></div></div>
+    <div class="stg hidden" id="ts"><p class="sub" style="letter-spacing:.12em">选择一张牌</p><div class="spread" id="spread"></div></div>
+    <div class="stg hidden" id="tr"><div class="rf"><div class="rn" id="rn"></div><div class="rs" id="rs"></div></div><div class="rtb"><p id="rt"></p><p class="ref" id="rr"></p></div><p class="rl">以上内容基于传统象征体系的文化解读，仅供娱乐与自我反思参考。</p><button class="btn btn2" id="tagain">再次占卜</button></div>
+  </div></section>
 
-            <a href="#" class="artifact artifact-coming">
-              <div class="artifact-icon">
-                <div class="astrolabe">
-                  <div class="astrolabe-ring"></div>
-                  <div class="astrolabe-ring astrolabe-ring-2"></div>
-                  <div class="astrolabe-center">✦</div>
-                </div>
-              </div>
-              <span class="artifact-name">星盘分析</span>
-              <span class="artifact-desc">天球仪</span>
-              <span class="artifact-soon">即将开启</span>
-            </a>
+  <section class="page" id="p-daily"><div class="pg tc">
+    <div class="dc"><div class="dcandle"><div class="dc-f"></div><div class="dc-b"></div><div class="dc-h"></div></div><h2>今天的蜡烛已经点燃。<br>火焰在风中摇曳，但没有熄灭——<br>就像你今天需要的那种坚持。</h2><button class="btn" id="dreveal">窥见今日启示</button></div>
+    <div class="hidden" id="dres"><div class="dm" id="dm"></div><p class="rl">以上内容基于传统象征体系的文化解读，仅供娱乐与自我反思参考。</p></div>
+  </div></section>
 
-            <a href="#" class="artifact artifact-coming">
-              <div class="artifact-icon">
-                <div class="parchment">
-                  <div class="parchment-line"></div>
-                  <div class="parchment-line"></div>
-                  <div class="parchment-line"></div>
-                </div>
-              </div>
-              <span class="artifact-name">姓名测算</span>
-              <span class="artifact-desc">羊皮纸</span>
-              <span class="artifact-soon">即将开启</span>
-            </a>
+  <section class="page" id="p-records"><div class="pg">
+    <div class="alc"><h2>壁龛</h2><p>你的每次探索，都被珍藏于此</p></div>
+    <div class="rl2" id="rlist"></div>
+    <div class="re" id="rempty"><p>壁龛空空如也。</p><p>也许你还没有准备好留下痕迹。</p><p>也许你来得太早。</p><p>也许……你来得正是时候。</p></div>
+  </div></section>
 
-            <a href="#daily" class="artifact" data-page="daily">
-              <div class="artifact-icon">
-                <div class="candle-icon">
-                  <div class="candle-flame"></div>
-                  <div class="candle-body"></div>
-                </div>
-              </div>
-              <span class="artifact-name">每日启示</span>
-              <span class="artifact-desc">桌角的蜡烛</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- 法律声明 -->
-      <footer class="legal-footer">
-        <p>本小程序提供文化与娱乐性质的象征解读服务，不构成任何形式的预测、建议或决策依据。人生的选择权始终在你手中。</p>
-      </footer>
-    </div>
-  </section>
-
-  <!-- ==================== 塔罗占卜 ==================== -->
-  <section id="page-tarot" class="page page-tarot">
-    <div class="page-inner">
-      <!-- 开始前 -->
-      <div id="tarot-intro" class="tarot-stage">
-        <div class="tarot-intro-text">
-          <p class="ritual-text">在翻开牌面之前，请在心中默念你的问题。</p>
-          <p class="ritual-sub">不必说出声——牌听得见。</p>
-        </div>
-        <button id="tarot-begin" class="btn-ritual">
-          <span class="btn-text">开始占卜</span>
-          <span class="btn-glow"></span>
-        </button>
-      </div>
-
-      <!-- 准备阶段：蜡烛倒计时 -->
-      <div id="tarot-preparing" class="tarot-stage hidden">
-        <div class="preparing-text">
-          <p>深呼吸。想你的问题。</p>
-        </div>
-        <div class="candle-countdown">
-          <div class="countdown-candle" id="candle-1">
-            <div class="countdown-flame"></div>
-            <div class="countdown-body"></div>
-          </div>
-          <div class="countdown-candle" id="candle-2">
-            <div class="countdown-flame"></div>
-            <div class="countdown-body"></div>
-          </div>
-          <div class="countdown-candle" id="candle-3">
-            <div class="countdown-flame"></div>
-            <div class="countdown-body"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 选牌阶段 -->
-      <div id="tarot-choosing" class="tarot-stage hidden">
-        <p class="choose-hint">选择一张牌</p>
-        <div class="tarot-spread">
-          <div class="tarot-card" data-index="0"><div class="card-back">✦</div><div class="card-front"></div></div>
-          <div class="tarot-card" data-index="1"><div class="card-back">✦</div><div class="card-front"></div></div>
-          <div class="tarot-card" data-index="2"><div class="card-back">✦</div><div class="card-front"></div></div>
-          <div class="tarot-card" data-index="3"><div class="card-back">✦</div><div class="card-front"></div></div>
-          <div class="tarot-card" data-index="4"><div class="card-back">✦</div><div class="card-front"></div></div>
-        </div>
-      </div>
-
-      <!-- 结果揭晓 -->
-      <div id="tarot-result" class="tarot-stage hidden">
-        <div class="result-card-display">
-          <div class="result-card-frame">
-            <div class="result-card-name" id="result-card-name"></div>
-            <div class="result-card-symbol" id="result-card-symbol"></div>
-          </div>
-        </div>
-        <div class="result-text-container">
-          <p class="result-text" id="result-text"></p>
-          <p class="result-reflection" id="result-reflection"></p>
-        </div>
-        <div class="result-legal">
-          <p>以上内容基于传统象征体系的文化解读，仅供娱乐与自我反思参考。</p>
-        </div>
-        <button id="tarot-again" class="btn-ritual btn-secondary">
-          <span class="btn-text">再次占卜</span>
-          <span class="btn-glow"></span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== 每日启示 ==================== -->
-  <section id="page-daily" class="page page-daily">
-    <div class="page-inner">
-      <div class="daily-candle-scene">
-        <div class="daily-candle">
-          <div class="daily-flame"></div>
-          <div class="daily-body">
-            <div class="daily-wax-drip"></div>
-          </div>
-          <div class="daily-holder"></div>
-        </div>
-        <p class="daily-intro">今天的蜡烛已经点燃。<br>火焰在风中摇曳，但没有熄灭——<br>就像你今天需要的那种坚持。</p>
-        <button id="daily-reveal" class="btn-ritual">
-          <span class="btn-text">窥见今日启示</span>
-          <span class="btn-glow"></span>
-        </button>
-      </div>
-      <div id="daily-result" class="daily-result hidden">
-        <div class="daily-message" id="daily-message"></div>
-        <div class="result-legal">
-          <p>以上内容基于传统象征体系的文化解读，仅供娱乐与自我反思参考。</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== 我的记录 ==================== -->
-  <section id="page-records" class="page page-records">
-    <div class="page-inner">
-      <div class="records-alcove">
-        <div class="alcove-header">
-          <h2 class="alcove-title">壁龛</h2>
-          <p class="alcove-subtitle">你的每次探索，都被珍藏于此</p>
-        </div>
-        <div id="records-list" class="records-list">
-          <!-- 动态填充 -->
-        </div>
-        <div id="records-empty" class="records-empty">
-          <p>壁龛空空如也。</p>
-          <p>也许你还没有准备好留下痕迹。</p>
-          <p>也许你来得太早。</p>
-          <p>也许……你来得正是时候。</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== 设置面板 ==================== -->
-  <div id="settings-panel" class="settings-panel hidden">
-    <div class="settings-overlay"></div>
-    <div class="settings-drawer">
-      <div class="settings-header">
-        <h3>烛台底部的暗格</h3>
-        <button class="settings-close" id="settings-close">✕</button>
-      </div>
-      <div class="settings-body">
-        <div class="setting-item">
-          <label>音效</label>
-          <div class="setting-toggle">
-            <input type="checkbox" id="sound-toggle" checked>
-            <label for="sound-toggle" class="toggle-label"></label>
-          </div>
-        </div>
-        <div class="setting-item">
-          <label>粒子效果</label>
-          <div class="setting-toggle">
-            <input type="checkbox" id="particles-toggle" checked>
-            <label for="particles-toggle" class="toggle-label"></label>
-          </div>
-        </div>
-        <div class="settings-legal">
-          <p>数据隐私：你的生辰、姓名等信息仅用于本小程序内的解读，不共享给第三方。</p>
-          <button class="btn-text-only" id="clear-data">清除所有个人数据</button>
-        </div>
-      </div>
-    </div>
+  <div class="set hidden" id="set">
+    <div class="set-o" id="seto"></div>
+    <div class="set-d"><div class="set-h"><h3>烛台底部的暗格</h3><button class="set-x" id="setx">✕</button></div><div class="set-i"><label>粒子效果</label><input type="checkbox" id="ptog" checked></div><div class="set-l"><p>数据隐私：你的信息仅用于本小程序内的解读，不共享给第三方。</p><button class="set-b" id="clr">清除所有个人数据</button></div></div>
   </div>
-
 </div>
 
-<!-- ==================== 烟雾过渡层 ==================== -->
-<div id="smoke-transition" class="smoke-transition">
-  <div class="smoke-layer smoke-1"></div>
-  <div class="smoke-layer smoke-2"></div>
-  <div class="smoke-layer smoke-3"></div>
-</div>
+<div class="smoke" id="smoke"><div class="sm"></div><div class="sm"></div><div class="sm"></div></div>
 
-<script src="app.js"></script>
+<script>
+const FX={c:null,p:[],on:true,init(){this.c=document.getElementById('fx');this.ctx=this.c.getContext('2d');this.resize();window.onresize=()=>this.resize();this.loop()},resize(){this.c.width=innerWidth;this.c.height=innerHeight},loop(){if(!this.on){this.ctx.clearRect(0,0,this.c.width,this.c.height);requestAnimationFrame(()=>this.loop());return}this.ctx.clearRect(0,0,this.c.width,this.c.height);if(Math.random()<.035)this.p.push({t:'e',x:Math.random()*this.c.width,y:this.c.height+10,vx:(Math.random()-.5)*.3,vy:-(Math.random()*.7+.2),s:Math.random()*2+.8,l:1,d:Math.random()*.003+.001,c:Math.random()>.5?'#e8a33c':'#b8962e'});if(Math.random()<.06)this.p.push({t:'d',x:Math.random()*this.c.width,y:Math.random()*this.c.height,vx:(Math.random()-.5)*.08,vy:Math.random()*.04,s:Math.random()*1.5+.4,l:1,d:Math.random()*.002+.0004,c:'#c0c0d0',w:Math.random()*6.28});if(Math.random()<.003){const sy='✦☽☿♃♄☉△◇'.split('');this.p.push({t:'r',x:Math.random()*this.c.width,y:Math.random()*this.c.height,sy:sy[Math.floor(Math.random()*sy.length)],s:Math.random()*11+7,l:1,d:.028,c:'#b8962e'})}this.p=this.p.filter(p=>{p.l-=p.d;if(p.l<=0)return false;if(p.t==='e'){p.x+=p.vx+Math.sin(p.y*.008)*.25;p.y+=p.vy;this.ctx.globalAlpha=p.l*.75;this.ctx.fillStyle=p.c;this.ctx.beginPath();this.ctx.arc(p.x,p.y,p.s,0,6.28);this.ctx.fill();this.ctx.globalAlpha=p.l*.15;this.ctx.beginPath();this.ctx.arc(p.x,p.y,p.s*3.5,0,6.28);this.ctx.fill()}if(p.t==='d'){p.x+=p.vx;p.y+=p.vy;p.w+=.015;this.ctx.globalAlpha=p.l*((Math.sin(p.w)+1)/2)*.45;this.ctx.fillStyle=p.c;this.ctx.beginPath();this.ctx.arc(p.x,p.y,p.s,0,6.28);this.ctx.fill()}if(p.t==='r'){this.ctx.globalAlpha=p.l;this.ctx.fillStyle=p.c;this.ctx.font=p.s+'px Georgia,serif';this.ctx.textAlign='center';this.ctx.fillText(p.sy,p.x,p.y)}this.ctx.globalAlpha=1;return true});requestAnimationFrame(()=>this.loop())}};
+
+const AU={c:null,on:false,amb:null,toggle(){if(!this.c)this.c=new(window.AudioContext||window.webkitAudioContext)();this.on=!this.on;if(this.on){const o=this.c.createOscillator(),g=this.c.createGain();o.connect(g);g.connect(this.c.destination);o.frequency.value=55;o.type='sine';g.gain.value=.01;o.start();this.amb={o,g};this.bT=setInterval(()=>this.bell(),32000)}else{if(this.amb){this.amb.g.gain.exponentialRampToValueAtTime(.001,this.c.currentTime+.5);setTimeout(()=>{try{this.amb.o.stop()}catch(e){}this.amb=null},500)}if(this.bT){clearInterval(this.bT);this.bT=null}}return this.on},click(){if(!this.on||!this.c)return;const o=this.c.createOscillator(),g=this.c.createGain();o.connect(g);g.connect(this.c.destination);o.frequency.value=880;o.type='sine';g.gain.setValueAtTime(.05,this.c.currentTime);g.gain.exponentialRampToValueAtTime(.001,this.c.currentTime+.1);o.start();o.stop(this.c.currentTime+.1)},success(){if(!this.on||!this.c)return;[523,659,784].forEach((f,i)=>{const o=this.c.createOscillator(),g=this.c.createGain();o.connect(g);g.connect(this.c.destination);o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(0,this.c.currentTime+i*.12);g.gain.linearRampToValueAtTime(.04,this.c.currentTime+i*.12+.06);g.gain.exponentialRampToValueAtTime(.001,this.c.currentTime+i*.12+1.8);o.start(this.c.currentTime+i*.12);o.stop(this.c.currentTime+i*.12+1.8)})},flip(){if(!this.on||!this.c)return;const n=this.c.createBufferSource(),b=this.c.createBuffer(1,this.c.sampleRate*.08,this.c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(this.c.sampleRate*.015));n.buffer=b;const g=this.c.createGain(),f=this.c.createBiquadFilter();f.type='highpass';f.frequency.value=2500;n.connect(f);f.connect(g);g.connect(this.c.destination);g.gain.value=.04;n.start()},bell(){if(!this.on||!this.c)return;const o=this.c.createOscillator(),g=this.c.createGain();o.connect(g);g.connect(this.c.destination);o.frequency.value=220;o.type='sine';g.gain.setValueAtTime(.015,this.c.currentTime);g.gain.exponentialRampToValueAtTime(.001,this.c.currentTime+3.5);o.start();o.stop(this.c.currentTime+3.5)}};
+
+const CARDS=[{n:'愚者',s:'✦',m:'新的开始正在展开。你站在悬崖边，但风会托住你。',r:'信任那个让你心跳加速的冲动。'},{n:'魔术师',s:'☿',m:'你手中已经握着所有需要的工具。',r:'此刻就是你施展的时刻。'},{n:'女祭司',s:'☽',m:'答案不在外面，在里面。你已经知道了。',r:'你内心的低语比外界的喧嚣更真实。'},{n:'女皇',s:'♀',m:'丰盛正在靠近。你值得拥有好的事物。',r:'接受本身就是一种力量。'},{n:'皇帝',s:'♂',m:'是时候为自己的生活建立结构了。',r:'边界是爱的另一种形式。'},{n:'恋人',s:'♡',m:'一个选择摆在你面前。',r:'听从那个让你感到"对"的方向。'},{n:'战车',s:'⚔',m:'前进的力量在你体内积聚。',r:'用行动回答质疑。'},{n:'力量',s:'🦁',m:'真正的力量是温柔地坚持。',r:'压制不是力量，接纳才是。'},{n:'隐士',s:'🏔',m:'是时候独处了。不是逃避，而是充电。',r:'灯塔也需要黑暗才能发光。'},{n:'命运之轮',s:'☸',m:'变化正在转动。',r:'轮子一直在转。'},{n:'正义',s:'⚖',m:'真相即将浮出水面。',r:'你已经知道什么是对的。'},{n:'倒吊人',s:'⚑',m:'换个角度看，答案就在那里。',r:'不行动就是最深的行动。'},{n:'死神',s:'♰',m:'一个章节正在结束。不是毁灭，是转化。',r:'告别是另一种开始。'},{n:'节制',s:'♒',m:'平衡正在恢复。',r:'刚刚好就是最好。'},{n:'恶魔',s:'⛓',m:'你被什么东西束缚着。关键是：锁链其实没有锁上。',r:'你随时可以离开。'},{n:'塔',s:'⚡',m:'有些东西必须倒塌，才能重建得更坚固。',r:'在废墟中找到真正属于你的地基。'},{n:'星星',s:'★',m:'希望正在回归。星星一直在那里。',r:'它们比你以为的更近。'},{n:'月亮',s:'☽',m:'有些事情不是表面看起来的那样。',r:'等月亮照亮那条隐藏的路。'},{n:'太阳',s:'☉',m:'光明正在到来。你值得这份快乐。',r:'有时候，好就是好。'},{n:'审判',s:'✧',m:'一个旧的召唤正在重新响起。',r:'听从那个让你感到使命感的声音。'},{n:'世界',s:'⊕',m:'一个循环即将完成。',r:'准备好迎接下一圈的开始。'}];
+const DAILY=['今天的风向变了。调整你的帆。','你今天会遇到一个巧合。不要忽略它。','今天适合沉默。有些答案只在安静中才会浮现。','你今天种下的种子，会在看不见的地方发芽。','今天的月亮在告诉你：该收尾了。','你今天会收到一个信号。听从它。','今天的火焰比昨天更亮。不要压制它。','今天的星尘落在你身上。','今天适合做那个一直拖着的决定。','今天的水是清澈的。现在是看清楚的最好时机。'];
+
+let cur='home',recs=JSON.parse(localStorage.getItem('mr')||'[]'),du=localStorage.getItem('md')||'';
+function $(id){return document.getElementById(id)}
+function inkReveal(elId,txt){const el=$(elId);el.innerHTML='';let i=0;const t=setInterval(()=>{if(i>=txt.length){clearInterval(t);return}const s=document.createElement('span');s.className='ink';s.textContent=txt[i];el.appendChild(s);i++},28)}
+function spawnDust(el){const r=el.getBoundingClientRect();for(let i=0;i<12;i++){const d=document.createElement('div');d.className='gd';d.style.left=(r.left+r.width/2)+'px';d.style.top=(r.top+r.height/2)+'px';d.style.setProperty('--dx',(Math.random()-.5)*90+'px');d.style.setProperty('--dy',(Math.random()-.5)*90+'px');document.body.appendChild(d);setTimeout(()=>d.remove(),1600)}}
+function saveRec(r){r.id=Date.now();r.date=new Date().toLocaleDateString('zh-CN');recs.unshift(r);localStorage.setItem('mr',JSON.stringify(recs));renderRecs()}
+function renderRecs(){const list=$('rlist'),empty=$('rempty');if(!recs.length){list.innerHTML='';empty.style.display='';return}empty.style.display='none';list.innerHTML=recs.map(r=>'<div class="rec"><div class="rec-h"><span class="rec-t">'+r.type+'</span><span class="rec-d">'+r.date+'</span></div><div class="rec-n">'+r.sym+' '+r.title+'</div><div class="rec-p">'+r.txt+'</div><button class="rec-x" data-id="'+r.id+'">抹去这段痕迹</button></div>').join('');list.querySelectorAll('.rec-x').forEach(b=>{b.onclick=e=>{e.stopPropagation();if(confirm('你确定要抹去这段痕迹吗？')){recs=recs.filter(x=>x.id!=b.dataset.id);localStorage.setItem('mr',JSON.stringify(recs));renderRecs();AU.click()}}})}
+function nav(p){if(p===cur)return;AU.click();const sk=$('smoke');sk.classList.add('on');setTimeout(()=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));const t=$('p-'+p);if(t)t.classList.add('on');document.querySelectorAll('.nl').forEach(x=>x.classList.remove('on'));const l=document.querySelector('.nl[data-p="'+p+'"]');if(l)l.classList.add('on');cur=p;sk.classList.add('out');setTimeout(()=>sk.classList.remove('on','out'),500)},420)}
+function buildCards(){const sp=$('spread');sp.innerHTML='';for(let i=0;i<5;i++){const c=document.createElement('div');c.className='card';c.innerHTML='<div class="card-f">✦</div><div class="card-b"></div>';c.addEventListener('click',()=>pickCard(c));sp.appendChild(c)}}
+function pickCard(el){if(el.classList.contains('flipped'))return;AU.flip();el.classList.add('flipped','sel');spawnDust(el);const card=CARDS[Math.floor(Math.random()*CARDS.length)];el.querySelector('.card-b').innerHTML='<span style="font-size:1.2rem">'+card.s+'</span><span>'+card.n+'</span>';setTimeout(()=>{document.querySelector('#ts').classList.add('hidden');$('tr').classList.remove('hidden');$('rn').textContent=card.n;$('rs').textContent=card.s;inkReveal('rt',card.m);setTimeout(()=>inkReveal('rr',card.r),card.m.length*28+500);AU.success();saveRec({type:'塔罗',title:card.n,sym:card.s,txt:card.m})},1300)}
+function resetTarot(){$('tr').classList.add('hidden');$('ti').classList.remove('hidden');document.querySelectorAll('.card').forEach(c=>c.classList.remove('flipped','sel'));document.querySelectorAll('.ccc').forEach(c=>c.classList.remove('lit'));buildCards()}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  FX.init();
+  if(localStorage.getItem('ma')){$('age').remove()}else{
+    $('ayes').onclick=()=>{localStorage.setItem('ma','1');$('age').classList.add('out');setTimeout(()=>$('age').remove(),600)};
+    $('ano').onclick=()=>{document.querySelector('.age-box h2').textContent='等你准备好了再来。';document.querySelector('.age-box p').textContent='';document.querySelector('.age-btns').innerHTML='<button class="btn" onclick="document.getElementById(\'age\').remove()">好的</button>'};
+  }
+  document.querySelectorAll('[data-p]').forEach(el=>el.onclick=e=>{e.preventDefault();nav(el.dataset.p)});
+  $('tbegin').onclick=()=>{AU.click();$('ti').classList.add('hidden');$('tp').classList.remove('hidden');['c1','c2','c3'].forEach((id,i)=>setTimeout(()=>{$(id).classList.add('lit');AU.click()},(i+1)*900));setTimeout(()=>{$('tp').classList.add('hidden');$('ts').classList.remove('hidden')},3200)};
+  $('tagain').onclick=()=>{AU.click();resetTarot()};
+  buildCards();
+  $('dreveal').onclick=()=>{AU.click();const t=new Date().toDateString();if(du===t){$('dres').classList.remove('hidden');$('dreveal').textContent='今日已窥见';$('dreveal').disabled=true;return}const m=DAILY[Math.floor(Math.random()*DAILY.length)];$('dres').classList.remove('hidden');inkReveal('dm',m);du=t;localStorage.setItem('md',t);$('dreveal').textContent='今日已窥见';$('dreveal').disabled=true;$('dreveal').style.opacity='.4';AU.success();saveRec({type:'每日启示',title:'今日启示',sym:'🕯',txt:m})};
+  renderRecs();
+  const sp=$('set');$('cog').onclick=()=>{AU.click();sp.classList.remove('hidden');requestAnimationFrame(()=>sp.classList.add('vis'))};const cl=()=>{sp.classList.remove('vis');setTimeout(()=>sp.classList.add('hidden'),500)};$('setx').onclick=cl;$('seto').onclick=cl;$('clr').onclick=()=>{if(confirm('确定清除所有数据？')){localStorage.clear();recs=[];du='';renderRecs();AU.click()}};$('ptog').onchange=e=>{FX.on=e.target.checked};
+  document.querySelectorAll('button').forEach(b=>{if(b.textContent.trim()==='🔇'||b.textContent.trim()==='🔊'){b.onclick=()=>{const on=AU.toggle();b.textContent=on?'🔊':'🔇'}}});
+});
+</script>
 </body>
 </html>

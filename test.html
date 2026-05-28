@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>测试</title>
+<style>
+body {
+  margin: 0;
+  background: #0d0a1a;
+  color: #e8e0d0;
+  font-family: Georgia, serif;
+  min-height: 100vh;
+}
+.age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 6, 26, 0.95);
+}
+.age-gate-content { text-align: center; }
+.age-gate-content p { color: #c8a84e; margin-bottom: 20px; font-size: 1.1rem; }
+.age-gate-buttons { display: flex; gap: 12px; justify-content: center; }
+.btn {
+  padding: 12px 32px;
+  background: transparent;
+  border: 1px solid #b8962e;
+  color: #c8a84e;
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+}
+.btn:hover { background: rgba(184, 150, 46, 0.1); }
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #08061a;
+  gap: 30px;
+}
+.splash-text { text-align: center; }
+.splash-line {
+  color: #c8a84e;
+  font-size: 1.1rem;
+  line-height: 2.2;
+  opacity: 0;
+  animation: fade-in 0.8s ease forwards;
+}
+.splash-line:nth-child(1) { animation-delay: 0.2s; }
+.splash-line:nth-child(2) { animation-delay: 0.4s; }
+.splash-line:nth-child(3) { animation-delay: 0.6s; }
+.splash-line:nth-child(4) { animation-delay: 0.8s; }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.enter-btn {
+  opacity: 0;
+  animation: fade-in 0.8s ease 1.2s forwards;
+  padding: 12px 32px;
+  background: transparent;
+  border: 1px solid #b8962e;
+  color: #c8a84e;
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+}
+
+.app { display: none; padding: 40px 20px; }
+.app.active { display: block; }
+.app h1 { color: #c8a84e; font-size: 1.4rem; text-align: center; margin-bottom: 30px; }
+.artifacts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.artifact {
+  padding: 24px 16px;
+  border: 1px solid rgba(184, 150, 46, 0.15);
+  border-radius: 8px;
+  background: rgba(21, 16, 40, 0.6);
+  text-align: center;
+  color: #c8a84e;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.artifact:hover {
+  border-color: rgba(184, 150, 46, 0.4);
+  background: rgba(26, 39, 68, 0.4);
+}
+.artifact-icon { font-size: 2rem; margin-bottom: 8px; }
+.artifact-name { font-size: 0.9rem; display: block; }
+.artifact-desc { font-size: 0.75rem; color: #807868; display: block; margin-top: 4px; }
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.7rem;
+  color: #504840;
+  line-height: 1.8;
+}
+</style>
+</head>
+<body>
+
+<!-- 年龄确认 -->
+<div class="age-gate" id="age-gate">
+  <div class="age-gate-content">
+    <p>你已年满18岁吗？</p>
+    <div class="age-gate-buttons">
+      <button class="btn" id="age-yes">我已成年</button>
+      <button class="btn" id="age-no">我还未成年</button>
+    </div>
+  </div>
+</div>
+
+<!-- 启动画面 -->
+<div class="splash" id="splash">
+  <div class="splash-text">
+    <p class="splash-line">你找到了这扇门。</p>
+    <p class="splash-line">这不是巧合。</p>
+    <p class="splash-line">在你出生的那一刻，</p>
+    <p class="splash-line">星辰就已经写好了这个时刻。</p>
+  </div>
+  <button class="enter-btn" id="enter-btn">我准备好了</button>
+</div>
+
+<!-- 主应用 -->
+<div class="app" id="app">
+  <h1>欢迎回来，旅人</h1>
+  <div class="artifacts">
+    <div class="artifact">
+      <div class="artifact-icon">🃏</div>
+      <span class="artifact-name">塔罗占卜</span>
+      <span class="artifact-desc">桌上的牌</span>
+    </div>
+    <div class="artifact">
+      <div class="artifact-icon">🔮</div>
+      <span class="artifact-name">星盘分析</span>
+      <span class="artifact-desc">天球仪</span>
+    </div>
+    <div class="artifact">
+      <div class="artifact-icon">📜</div>
+      <span class="artifact-name">姓名测算</span>
+      <span class="artifact-desc">羊皮纸</span>
+    </div>
+    <div class="artifact">
+      <div class="artifact-icon">🕯️</div>
+      <span class="artifact-name">每日启示</span>
+      <span class="artifact-desc">桌角的蜡烛</span>
+    </div>
+  </div>
+  <div class="footer">
+    <p>本小程序提供文化与娱乐性质的象征解读服务，不构成任何形式的预测、建议或决策依据。人生的选择权始终在你手中。</p>
+  </div>
+</div>
+
+<script>
+// 年龄确认
+document.getElementById('age-yes').onclick = () => {
+  document.getElementById('age-gate').style.opacity = '0';
+  document.getElementById('age-gate').style.transition = 'opacity 0.5s';
+  setTimeout(() => document.getElementById('age-gate').remove(), 500);
+};
+document.getElementById('age-no').onclick = () => {
+  alert('等你准备好了再来。');
+};
+
+// 进入
+document.getElementById('enter-btn').onclick = () => {
+  document.getElementById('splash').style.opacity = '0';
+  document.getElementById('splash').style.transition = 'opacity 0.8s';
+  setTimeout(() => {
+    document.getElementById('splash').remove();
+    document.getElementById('app').classList.add('active');
+  }, 800);
+};
+</script>
+</body>
+</html>
