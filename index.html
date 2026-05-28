@@ -41,8 +41,8 @@ textarea{resize:vertical;min-height:80px}
 .rsym{animation:glow 1.2s ease-in-out .8s forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes glow{0%{opacity:0}50%{opacity:1}to{opacity:.85}}
-.sl{font-size:1.05rem;color:var(--tg);line-height:2.6;opacity:0;animation:rise .9s var(--ease) forwards;letter-spacing:.04em}
-.sl:nth-child(1){animation-delay:.4s}.sl:nth-child(2){animation-delay:.7s}.sl:nth-child(3){animation-delay:1s}.sl:nth-child(4){animation-delay:1.3s}
+.sl{font-size:1.05rem;color:var(--tg);line-height:2.6;opacity:0;letter-spacing:.04em;transform:translateY(14px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.sl.show{opacity:1;transform:translateY(0)}
 
 /* Doors */
 .doors{position:fixed;inset:0;z-index:850;display:flex;pointer-events:none}
@@ -279,7 +279,7 @@ textarea{resize:vertical;min-height:80px}
 
 <div class="age" id="age"><div class="age-box"><h2>你已年满18岁吗？</h2><p>你还年轻，星辰为你保留了最多的可能性。<br>这些解读可以参考，但不要让它替你做决定。</p><div class="age-btns"><button class="btn" id="ayes">我已成年</button><button class="btn btn2" id="ano">我还未成年</button></div></div></div>
 
-<div class="splash" id="splash"><div class="si"><div class="rune"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><defs><filter id="gw"><feGaussianBlur stdDeviation="2.5" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b8962e" stop-opacity="0"/><stop offset="50%" stop-color="#e8a33c" stop-opacity="1"/><stop offset="100%" stop-color="#b8962e" stop-opacity="0"/></linearGradient></defs><circle cx="100" cy="100" r="80" fill="none" stroke="url(#rg)" stroke-width=".5" class="rc"/><circle cx="100" cy="100" r="60" fill="none" stroke="url(#rg)" stroke-width=".5" class="rc rc2"/><circle cx="100" cy="100" r="40" fill="none" stroke="url(#rg)" stroke-width=".5" class="rc rc3"/><polygon points="100,20 140,80 180,140 100,180 20,140 60,80" fill="none" stroke="url(#rg)" stroke-width=".8" class="rh" filter="url(#gw)"/><text x="100" y="108" text-anchor="middle" class="rsym" fill="#e8a33c" font-size="28" opacity="0">☿</text></svg></div><div class="s-lines"><p class="sl">你找到了这扇门。</p><p class="sl">这不是巧合。</p><p class="sl">在你出生的那一刻，</p><p class="sl">星辰就已经写好了这个时刻。</p></div><button class="btn" id="enter" style="opacity:0;animation:rise .9s var(--ease) 2s forwards">我准备好了</button></div></div>
+<div class="splash" id="splash"><div class="si"><div class="rune"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><defs><filter id="gw"><feGaussianBlur stdDeviation="2.5" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b8962e" stop-opacity="0"/><stop offset="50%" stop-color="#e8a33c" stop-opacity="1"/><stop offset="100%" stop-color="#b8962e" stop-opacity="0"/></linearGradient></defs><circle cx="100" cy="100" r="80" fill="none" stroke="url(#rg)" stroke-width=".5" class="rc"/><circle cx="100" cy="100" r="60" fill="none" stroke="url(#rg)" stroke-width=".5" class="rc rc2"/><circle cx="100" cy="100" r="40" fill="none" stroke="url(#rg)" stroke-width=".5" class="rc rc3"/><polygon points="100,20 140,80 180,140 100,180 20,140 60,80" fill="none" stroke="url(#rg)" stroke-width=".8" class="rh" filter="url(#gw)"/><text x="100" y="108" text-anchor="middle" class="rsym" fill="#e8a33c" font-size="28" opacity="0">☿</text></svg></div><div class="s-lines"><p class="sl">你找到了这扇门。</p><p class="sl">这不是巧合。</p><p class="sl">在你出生的那一刻，</p><p class="sl">星辰就已经写好了这个时刻。</p></div><button class="btn" id="enter" style="opacity:0;transform:translateY(14px);transition:opacity .9s var(--ease),transform .9s var(--ease)">我准备好了</button></div></div>
 
 <div class="doors" id="doors"><div class="door door-l" id="dl"><span class="door-s">☽</span></div><div class="door door-r" id="dr"><span class="door-s">☾</span></div></div>
 
@@ -452,6 +452,7 @@ function inkReveal(elId,txt){const el=$(elId);el.innerHTML='';let i=0;const t=se
 function spawnDust(el){const r=el.getBoundingClientRect();for(let i=0;i<10;i++){const d=document.createElement('div');d.className='gd';d.style.left=(r.left+r.width/2)+'px';d.style.top=(r.top+r.height/2)+'px';d.style.setProperty('--dx',(Math.random()-.5)*80+'px');d.style.setProperty('--dy',(Math.random()-.5)*80+'px');document.body.appendChild(d);setTimeout(()=>d.remove(),1600)}}
 function saveRec(r){r.id=Date.now();r.date=new Date().toLocaleDateString('zh-CN');recs.unshift(r);localStorage.setItem('mr',JSON.stringify(recs));renderRecs()}
 function renderRecs(){const list=$('rlist'),empty=$('rempty');if(!recs.length){list.innerHTML='';empty.style.display='';return}empty.style.display='none';list.innerHTML=recs.map(r=>'<div class="rec"><div class="rec-h"><span class="rec-t">'+r.type+'</span><span class="rec-d">'+r.date+'</span></div><div class="rec-n">'+r.sym+' '+r.title+'</div><div class="rec-p">'+r.txt+'</div><button class="rec-x" data-id="'+r.id+'">抹去这段痕迹</button></div>').join('');list.querySelectorAll('.rec-x').forEach(b=>{b.onclick=e=>{e.stopPropagation();if(confirm('你确定要抹去这段痕迹吗？')){recs=recs.filter(x=>x.id!=b.dataset.id);localStorage.setItem('mr',JSON.stringify(recs));renderRecs();AU.click()}}})}
+function animateSplash(){document.querySelectorAll('.sl').forEach((el,i)=>setTimeout(()=>el.classList.add('show'),i*300+200));setTimeout(()=>{$('enter').style.opacity='1';$('enter').style.transform='translateY(0)'},1600)}
 function nav(p){if(p===cur)return;AU.click();const sk=$('smoke');sk.classList.add('on');setTimeout(()=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));const t=$('p-'+p);if(t)t.classList.add('on');document.querySelectorAll('.nl').forEach(x=>x.classList.remove('on'));const l=document.querySelector('.nl[data-p="'+p+'"]');if(l)l.classList.add('on');cur=p;sk.classList.add('out');setTimeout(()=>sk.classList.remove('on','out'),450)},380)}
 
 // MOON PHASE
@@ -492,7 +493,7 @@ FX.init();
 $('moon-info').textContent=getMoonPhase();
 // Age
 if(localStorage.getItem('ma')){$('age').remove();$('splash').remove();$('doors').remove();$('app').classList.remove('hidden')}else{
-$('ayes').onclick=()=>{localStorage.setItem('ma','1');$('age').classList.add('out');setTimeout(()=>$('age').remove(),600)};
+$('ayes').onclick=()=>{localStorage.setItem('ma','1');$('age').classList.add('out');setTimeout(()=>{$('age').remove();animateSplash()},600)};
 $('ano').onclick=()=>{document.querySelector('.age-box h2').textContent='等你准备好了再来。';document.querySelector('.age-box p').textContent='';document.querySelector('.age-btns').innerHTML='<button class="btn" onclick="document.getElementById(\'age\').remove()">好的</button>'};
 // Splash
 $('enter').onclick=()=>{AU.click();$('dl').classList.add('open');$('dr').classList.add('open');setTimeout(()=>{$('splash').classList.add('gone');$('app').classList.remove('hidden');AU.success()},900);setTimeout(()=>$('doors').remove(),2500)}}
