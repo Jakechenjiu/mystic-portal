@@ -500,7 +500,7 @@ class MysticApp {
     setTimeout(() => {
       document.getElementById('tarot-preparing').classList.add('hidden');
       document.getElementById('tarot-choosing').classList.remove('hidden');
-    }, 4000);
+    }, 3500);
   }
 
   selectTarotCard(cardEl) {

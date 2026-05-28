@@ -178,17 +178,17 @@ body::before {
 .rune-circle {
   stroke-dasharray: 502;
   stroke-dashoffset: 502;
-  animation: rune-draw 3s var(--ease-ritual) forwards;
+  animation: rune-draw 1.5s var(--ease-ritual) forwards;
 }
-.rune-circle-2 { animation-delay: 0.5s; }
-.rune-circle-3 { animation-delay: 1s; }
+.rune-circle-2 { animation-delay: 0.2s; }
+.rune-circle-3 { animation-delay: 0.4s; }
 .rune-hex {
   stroke-dasharray: 600;
   stroke-dashoffset: 600;
-  animation: rune-draw 2s var(--ease-ritual) 1.5s forwards;
+  animation: rune-draw 1s var(--ease-ritual) 0.5s forwards;
 }
 .rune-symbol {
-  animation: rune-symbol-glow 2s ease-in-out 2.5s forwards;
+  animation: rune-symbol-glow 1s ease-in-out 0.8s forwards;
 }
 
 @keyframes rune-draw {
@@ -213,10 +213,10 @@ body::before {
   transform: translateY(10px);
   animation: line-reveal 0.8s var(--ease-ritual) forwards;
 }
-.splash-line-1 { animation-delay: 3s; }
-.splash-line-2 { animation-delay: 3.5s; }
-.splash-line-3 { animation-delay: 4s; }
-.splash-line-4 { animation-delay: 4.5s; }
+.splash-line-1 { animation-delay: 0.3s; }
+.splash-line-2 { animation-delay: 0.6s; }
+.splash-line-3 { animation-delay: 0.9s; }
+.splash-line-4 { animation-delay: 1.2s; }
 
 @keyframes line-reveal {
   to { opacity: 1; transform: translateY(0); }
@@ -224,7 +224,7 @@ body::before {
 
 .splash-enter {
   opacity: 0;
-  animation: fade-in 1s var(--ease-ritual) 5.5s forwards;
+  animation: fade-in 1s var(--ease-ritual) 1.8s forwards;
 }
 
 /* 门扉 */
