@@ -32,10 +32,10 @@
   /* 荧光色 — 禁用 */
   /* 大面积白色 — 禁用 */
 
-  /* 字体 */
-  --font-display: 'Cinzel Decorative', 'Noto Serif SC', serif;
-  --font-heading: 'Cinzel', 'Noto Serif SC', serif;
-  --font-body:    'EB Garamond', 'Noto Serif SC', serif;
+  /* 字体 — 使用系统字体，兼容国内网络 */
+  --font-display: 'Georgia', 'Noto Serif SC', 'SimSun', serif;
+  --font-heading: 'Georgia', 'Noto Serif SC', 'SimSun', serif;
+  --font-body:    'Georgia', 'Noto Serif SC', 'SimSun', serif;
 
   /* 间距 */
   --space-xs:  0.25rem;
