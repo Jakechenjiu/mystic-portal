@@ -78,11 +78,11 @@ canvas{display:block;position:fixed;inset:0;z-index:0}
 .panel{position:fixed;inset:0;z-index:20;display:grid;place-items:center;transition:opacity 1.2s var(--ease);opacity:0;pointer-events:none;padding:60px 16px 80px}
 .panel.show{opacity:1;pointer-events:auto}
 .panel-inner{
-  width:100%;height:100%;padding:28px 20px;overflow-y:auto;
+  width:100%;max-width:480px;max-height:calc(100vh - 140px);padding:28px 20px;overflow-y:auto;
   background:radial-gradient(ellipse at 50% 0%,rgba(26,8,40,.85),rgba(6,3,16,.92));
   border:1px solid rgba(212,175,55,.08);
   border-radius:12px;
-    box-shadow:0 0 60px rgba(6,3,16,.5),inset 0 0 30px rgba(212,175,55,.02);
+  box-shadow:0 0 60px rgba(6,3,16,.5),inset 0 0 30px rgba(212,175,55,.02);
   scrollbar-width:thin;scrollbar-color:var(--gold-d) transparent;
 }
 .panel-inner::-webkit-scrollbar{width:3px}
